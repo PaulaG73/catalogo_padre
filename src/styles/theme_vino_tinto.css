@@ -1,0 +1,160 @@
+/*Paleta vino: fondos muy pálidos + acento legible (sustituye el rol del verde #198754) */
+:root,
+[data-bs-theme="light"] {
+  --vin-palido: #f0e4e7;
+  --vin-fondo-seccion: #f6f0f2;
+  --vin-acento: #6d2c35;
+  --vin-acento-rgb: 109, 44, 53;
+  --vin-acento-hover: #54252b;
+  --vin-acento-active: #451e22;
+
+  --vin-profundo: #3a0f18;
+  --vin-profundo-rgb: 58, 15, 24;
+
+  /* Look oscuro: negro neutro (menos carga “vino” en el pixel) + superficies */
+  --vin-negro-marca: #0a0a0a;
+  --vin-superficie-oscura: #121112;
+  --vin-superficie-alterna: #181618;
+  /* Burdeos packs: un poco más bajo en saturación / más legible con texto claro */
+  --vin-fondo-packs: #24161c;
+  --vin-texto-claro: rgba(255, 255, 255, 0.96);
+  --vin-texto-muted: rgba(255, 255, 255, 0.8);
+  /* Acento aclarado para texto sobre negro (p. ej. “Sobre mí”) */
+  --vin-acento-sobre-negro: #e4b3bc;
+  --vin-borde-sutil: rgba(255, 255, 255, 0.1);
+
+  /* Verde marca WhatsApp (solo botón WA) */
+  --wa-green: #25d366;
+  --wa-green-hover: #20bd5a;
+  --wa-green-active: #1da851;
+  --wa-green-rgb: 37, 211, 102;
+
+  --bs-success: var(--vin-acento);
+  --bs-success-rgb: var(--vin-acento-rgb);
+  --bs-success-text-emphasis: #3d1a1f;
+  --bs-success-bg-subtle: var(--vin-palido);
+  --bs-success-border-subtle: #d4bfc4;
+}
+
+.bg-vino-palido {
+  background-color: var(--vin-palido) !important;
+}
+
+.bg-vino-profundo {
+  background-color: var(--vin-profundo) !important;
+}
+
+.bg-vin-negro {
+  background-color: var(--vin-negro-marca) !important;
+}
+
+/* Tooltip junto al botón WhatsApp (footer y tarjetas): un solo estilo */
+.footer-wa-tooltip,
+.card-wa-tooltip {
+  position: absolute;
+  left: calc(100% + 10px);
+  top: 50%;
+  translate: -6px -50%;
+  padding: 0.4rem 0.75rem;
+  background: #fff;
+  color: var(--vin-profundo, #3a0f18);
+  font-family: 'Nunito', system-ui, sans-serif;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  line-height: 1.25;
+  text-align: center;
+  white-space: nowrap;
+  border-radius: 0.4rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.22);
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  z-index: 20;
+  transition:
+    opacity 0.2s ease,
+    visibility 0.2s ease,
+    translate 0.2s ease;
+}
+
+.footer-wa-tooltip::after,
+.card-wa-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 100%;
+  translate: 2px -50%;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 7px 8px 7px 0;
+  border-color: transparent #fff transparent transparent;
+  filter: drop-shadow(-2px 0 3px rgba(0, 0, 0, 0.12));
+}
+
+.footer-wa-wrap:hover .footer-wa-tooltip,
+.footer-wa-wrap:focus-within .footer-wa-tooltip,
+.card-wa-wrap:hover .card-wa-tooltip,
+.card-wa-wrap:focus-within .card-wa-tooltip {
+  opacity: 1;
+  visibility: visible;
+  translate: 0 -50%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .footer-wa-tooltip,
+  .card-wa-tooltip {
+    transition: none;
+    translate: 0 -50%;
+  }
+}
+
+.btn-whatsapp {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: var(--wa-green);
+  --bs-btn-border-color: var(--wa-green);
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: var(--wa-green-hover);
+  --bs-btn-hover-border-color: var(--wa-green-hover);
+  --bs-btn-focus-shadow-rgb: var(--wa-green-rgb);
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: var(--wa-green-active);
+  --bs-btn-active-border-color: var(--wa-green-active);
+  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  --bs-btn-disabled-color: #fff;
+  --bs-btn-disabled-bg: var(--wa-green);
+  --bs-btn-disabled-border-color: var(--wa-green);
+}
+
+.btn-success {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: var(--vin-acento);
+  --bs-btn-border-color: var(--vin-acento);
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: var(--vin-acento-hover);
+  --bs-btn-hover-border-color: #4a2229;
+  --bs-btn-focus-shadow-rgb: var(--vin-acento-rgb);
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: var(--vin-acento-active);
+  --bs-btn-active-border-color: #3d1c22;
+  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  --bs-btn-disabled-color: #fff;
+  --bs-btn-disabled-bg: var(--vin-acento);
+  --bs-btn-disabled-border-color: var(--vin-acento);
+}
+
+.btn-outline-success {
+  --bs-btn-color: var(--vin-acento);
+  --bs-btn-border-color: var(--vin-acento);
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: var(--vin-acento);
+  --bs-btn-hover-border-color: var(--vin-acento);
+  --bs-btn-focus-shadow-rgb: var(--vin-acento-rgb);
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: var(--vin-acento-hover);
+  --bs-btn-active-border-color: #4a2229;
+  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  --bs-btn-disabled-color: var(--vin-acento);
+  --bs-btn-disabled-bg: transparent;
+  --bs-btn-disabled-border-color: var(--vin-acento);
+  --bs-gradient: none;
+}
