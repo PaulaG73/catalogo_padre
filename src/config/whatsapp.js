@@ -48,6 +48,9 @@ function getShareBaseOrigin() {
 
 const OG_PAGE_SUFFIX = '.html'
 
+/** Vista previa del catálogo completo (og:image = imagen_papá, ruta ASCII para WhatsApp). */
+const CATALOG_OG_PAGE = 'og-catalogo.html'
+
 /**
  * Nombre de archivo en `public/`: `og-{id en minúsculas}.html` (Netlify/Linux distinguen mayúsculas; si no coincide, cae el SPA y WhatsApp muestra el og:image del index: logo).
  */
@@ -155,12 +158,27 @@ export function getWhatsAppUrl() {
 }
 
 /**
- * WhatsApp desde el pie: un solo texto (api.whatsapp.com evita rarezas con wa.me + borradores viejos).
+ * URL de la página OG del catálogo (vista previa con imagen_papá en WhatsApp).
+ */
+function resolveCatalogPreviewUrlForWhatsApp() {
+  const base = getShareBaseOrigin()
+  if (!base) return ''
+  return `${base}/${CATALOG_OG_PAGE}`
+}
+
+/**
+ * WhatsApp desde el pie: texto + enlace al catálogo con vista previa (api.whatsapp.com evita rarezas con wa.me + borradores viejos).
  */
 export function getWhatsAppFooterUrl() {
   const digits = digitsOnly()
   if (!digits) return '#'
-  const text = 'Hola Vinóloga, quiero hacer un pedido de vinos...'
+  const parts = ['Hola Vinóloga, quiero hacer un pedido de vinos...']
+  const previewUrl = resolveCatalogPreviewUrlForWhatsApp()
+  if (previewUrl && /^https:\/\//i.test(previewUrl)) {
+    parts.push('')
+    parts.push(previewUrl)
+  }
+  const text = parts.join('\n').trimEnd()
   return `https://api.whatsapp.com/send?phone=${digits}&text=${encodeURIComponent(text)}`
 }
 
