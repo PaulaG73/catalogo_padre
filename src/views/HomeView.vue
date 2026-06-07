@@ -2,24 +2,27 @@
   <NavBar />
 
   <section id="sobre-mi" class="home-section sobre-mi-section--light py-1 py-md-2">
-    <div class="container sobre-mi d-flex justify-content-center">
-      <img
-        class="sobre-mi-hero-img"
-        src="/img/imagen_pap%C3%A1.jpg"
-        alt="Especial Día del Padre"
-        width="560"
-        height="240"
-        loading="lazy"
-        decoding="async"
-      >
-    </div>
-
-    <div class="container text-end mt-0">
-      <a href="#" class="btn btn-sm btn-outline-success rounded-circle p-1 btn-top" title="Volver al inicio" aria-label="Volver al inicio">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
-          <path d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 0 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5z"/>
-        </svg>
-      </a>
+    <div class="container sobre-mi">
+      <div class="sobre-mi-media">
+        <img
+          class="sobre-mi-hero-img"
+          src="/img/imagen_pap%C3%A1.jpg"
+          alt="Especial Día del Padre"
+          width="560"
+          height="240"
+          loading="lazy"
+          decoding="async"
+        >
+        <img
+          class="sobre-mi-logo"
+          src="/img/logo-vinologa.png"
+          alt="Logo Vinóloga"
+          width="180"
+          height="180"
+          loading="lazy"
+          decoding="async"
+        >
+      </div>
     </div>
   </section>
   <section id="packs" class="home-section home-section--slate pt-4 pt-md-5 pb-2 pb-md-3">
@@ -393,39 +396,48 @@ onUnmounted(() => {
 }
 
 /* Línea burdeos + corazón bajo el título del carrusel (Día del Padre) */
+#packs .packs-titulo {
+  padding-bottom: 1.35rem;
+}
+
 #packs .packs-titulo::before {
   content: '';
   position: absolute;
   z-index: 0;
   left: 50%;
-  bottom: 0.38rem;
-  width: clamp(4.5rem, 30vw, 7.5rem);
-  height: 2px;
+  bottom: 0.45rem;
+  width: clamp(5.5rem, 38vw, 9.5rem);
+  height: 3px;
   transform: translateX(-50%);
-  border-radius: 2px;
+  border-radius: 3px;
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(var(--vin-acento-rgb), 0.15) 8%,
-    rgba(var(--vin-acento-rgb), 0.88) 22%,
-    rgba(var(--vin-acento-rgb), 0.88) 78%,
-    rgba(var(--vin-acento-rgb), 0.15) 92%,
+    rgba(var(--vin-acento-rgb), 0.35) 10%,
+    rgba(var(--vin-acento-rgb), 1) 28%,
+    rgba(var(--vin-acento-rgb), 1) 72%,
+    rgba(var(--vin-acento-rgb), 0.35) 90%,
     transparent 100%
   );
+  box-shadow: 0 0 10px rgba(var(--vin-acento-rgb), 0.45);
   pointer-events: none;
 }
 
 #packs .packs-titulo::after {
-  content: '';
+  content: '♥';
   position: absolute;
   z-index: 1;
   left: 50%;
-  bottom: 0.14rem;
-  width: clamp(0.55rem, 3vw, 0.72rem);
-  height: clamp(0.55rem, 3vw, 0.72rem);
+  bottom: 0.18rem;
+  width: auto;
+  height: auto;
   transform: translateX(-50%);
-  background-color: var(--vin-acento, #6d2c35);
-  clip-path: path('M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z');
+  color: var(--vin-acento, #6d2c35);
+  font-size: clamp(0.9rem, 4.5vw, 1.2rem);
+  line-height: 1;
+  text-shadow:
+    0 0 8px rgba(var(--vin-acento-rgb), 0.65),
+    0 1px 2px rgba(0, 0, 0, 0.35);
   pointer-events: none;
 }
 
@@ -450,12 +462,14 @@ onUnmounted(() => {
 @keyframes packsTituloLinea {
   0%,
   100% {
-    opacity: 0.88;
+    opacity: 0.9;
     transform: translateX(-50%) scaleX(1);
+    box-shadow: 0 0 8px rgba(var(--vin-acento-rgb), 0.35);
   }
   50% {
     opacity: 1;
-    transform: translateX(-50%) scaleX(1.04);
+    transform: translateX(-50%) scaleX(1.08);
+    box-shadow: 0 0 14px rgba(var(--vin-acento-rgb), 0.6);
   }
 }
 
@@ -463,9 +477,11 @@ onUnmounted(() => {
   0%,
   100% {
     transform: translateX(-50%) scale(1);
+    opacity: 0.92;
   }
   50% {
-    transform: translateX(-50%) scale(1.08);
+    transform: translateX(-50%) scale(1.18);
+    opacity: 1;
   }
 }
 
@@ -507,12 +523,32 @@ onUnmounted(() => {
   background-color: #fff;
 }
 
+#sobre-mi .sobre-mi-media {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(1rem, 4vw, 2.5rem);
+}
+
 #sobre-mi .sobre-mi-hero-img {
   display: block;
   width: clamp(155px, 48vw, 330px);
   max-width: 100%;
   height: auto;
   object-fit: contain;
+  flex-shrink: 0;
+}
+
+#sobre-mi .sobre-mi-logo {
+  display: block;
+  width: clamp(100px, 32vw, 180px);
+  height: clamp(100px, 32vw, 180px);
+  object-fit: cover;
+  object-position: center;
+  border-radius: 50%;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 2px rgba(109, 44, 53, 0.15);
 }
 
 .highlight {
