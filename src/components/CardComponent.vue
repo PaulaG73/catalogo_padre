@@ -66,26 +66,22 @@
           </template>
         </div>
         <hr class="card-divider flex-shrink-0">
-        <div class="card-price-footer flex-shrink-0">
-          <div
-            v-if="priceOferta && !agotado"
-            class="card-price-oferta text-center"
-          >
-            <p class="card-price-oferta-label mb-0 fw-bold">{{ ofertaEtiqueta }}</p>
-            <p class="card-price card-price--oferta mb-0 fw-bold text-success">{{ priceOferta }}</p>
-            <p class="card-price card-price--regular mb-0 text-secondary text-decoration-line-through">
+        <div class="card-price-wa-row flex-shrink-0">
+          <div class="card-prices">
+            <template v-if="priceOferta && !agotado">
+              <p class="card-price card-price--regular mb-0 text-secondary text-decoration-line-through">
+                {{ price }}
+              </p>
+              <p class="card-price card-price--oferta mb-0 fw-bold text-success">{{ priceOferta }}</p>
+            </template>
+            <p
+              v-else
+              class="card-price mb-0 fw-bold text-center"
+              :class="agotado ? 'text-secondary text-decoration-line-through' : 'text-success'"
+            >
               {{ price }}
             </p>
           </div>
-          <p
-            v-else
-            class="card-price mb-0 fw-bold text-center"
-            :class="agotado ? 'text-secondary text-decoration-line-through' : 'text-success'"
-          >
-            {{ price }}
-          </p>
-        </div>
-        <div class="card-wa-footer flex-shrink-0">
           <span class="card-wa-wrap">
             <a
               class="btn btn-whatsapp rounded-circle card-wa-btn shadow-sm"
@@ -191,7 +187,7 @@
       title: props.title,
       valle: props.valle,
       price: precioWhatsApp.value,
-      ofertaEtiqueta: props.priceOferta?.trim() ? props.ofertaEtiqueta?.trim() : '',
+      precioDiaPadre: Boolean(props.priceOferta?.trim()),
       image: props.image,
     }),
   )
@@ -449,26 +445,27 @@
     margin-top: 0.5rem;
   }
   
-  .card-price-footer {
+  .card-price-wa-row {
+    position: relative;
+    z-index: 1;
     display: flex;
+    flex-direction: row;
     align-items: center;
     justify-content: center;
-    min-height: 2.35rem;
+    gap: 0.55rem;
     box-sizing: border-box;
-    padding-top: 0.25rem;
-    padding-bottom: 0.1rem;
+    padding: 0.2rem 0 0.35rem;
   }
 
-  .card-price-oferta-label {
-    font-size: clamp(0.72rem, 1.85vw, 0.82rem);
-    line-height: 1.15;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: var(--vin-acento, #6b2d3e);
+  .card-price-wa-row:hover,
+  .card-price-wa-row:focus-within {
+    z-index: 5;
   }
 
-  .card-price--oferta {
-    font-size: clamp(0.95rem, 2.35vw, 1.12rem);
+  .card-prices {
+    text-align: center;
+    flex: 0 1 auto;
+    min-width: 0;
   }
 
   .card-price--regular {
@@ -476,6 +473,12 @@
     line-height: 1.15;
     font-weight: 600;
     opacity: 0.85;
+    margin-bottom: 0.08rem;
+  }
+
+  .card-price--oferta {
+    font-size: clamp(0.95rem, 2.35vw, 1.12rem);
+    line-height: 1.15;
   }
   
   .card-price {
@@ -486,30 +489,17 @@
     font-weight: 700;
   }
 
-  .card-wa-footer {
-    position: relative;
-    z-index: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding-top: 0.35rem;
-    padding-bottom: 0.35rem;
-  }
-
-  .card-wa-footer:hover,
-  .card-wa-footer:focus-within {
-    z-index: 5;
-  }
-
   .card-wa-wrap {
     position: relative;
     display: inline-flex;
+    flex-shrink: 0;
+    align-self: center;
     vertical-align: middle;
   }
 
   .card-wa-btn {
-    width: 2.35rem;
-    height: 2.35rem;
+    width: 2.15rem;
+    height: 2.15rem;
     padding: 0;
     display: inline-flex;
     align-items: center;

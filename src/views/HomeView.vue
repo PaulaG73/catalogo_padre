@@ -93,7 +93,7 @@
       </button>
     </div>
     <div class="container text-end mt-2">
-      <a href="#" class="btn btn-sm btn-outline-success rounded-circle p-1 btn-top" title="Volver al inicio" aria-label="Volver al inicio">
+      <a href="#sobre-mi" class="btn btn-sm rounded-circle p-1 btn-top" title="Volver al inicio" aria-label="Volver al inicio">
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
           <path d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 0 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5z"/>
         </svg>
@@ -529,6 +529,32 @@ onUnmounted(() => {
   background-color: #fff;
 }
 
+@media (max-width: 767.98px) {
+  #sobre-mi.sobre-mi-section--light {
+    padding-top: 0.35rem !important;
+    padding-bottom: 0.35rem !important;
+  }
+
+  #sobre-mi .sobre-mi-media {
+    gap: 0.5rem;
+  }
+
+  #sobre-mi .sobre-mi-dedicatoria {
+    max-width: 18.5rem;
+    font-size: clamp(0.78rem, 2.1vw, 0.88rem);
+    line-height: 1.4;
+  }
+
+  #sobre-mi .sobre-mi-hero-img {
+    width: clamp(120px, 38vw, 200px);
+  }
+
+  #sobre-mi .sobre-mi-logo {
+    width: clamp(72px, 22vw, 96px);
+    height: clamp(72px, 22vw, 96px);
+  }
+}
+
 #sobre-mi .sobre-mi-media {
   display: flex;
   flex-direction: column;
@@ -610,12 +636,38 @@ onUnmounted(() => {
 }
 
 .btn-top {
-  width: 2rem;
-  height: 2rem;
+  width: 2.35rem;
+  height: 2.35rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   line-height: 1;
+  background-color: #fff;
+  color: var(--vin-acento);
+  border: 2px solid rgba(255, 255, 255, 0.95);
+  box-shadow:
+    0 0 0 1px rgba(var(--vin-acento-rgb), 0.45),
+    0 4px 16px rgba(0, 0, 0, 0.55);
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.btn-top:hover,
+.btn-top:focus-visible {
+  background-color: var(--vin-acento);
+  color: #fff;
+  border-color: var(--vin-acento);
+  box-shadow:
+    0 0 0 2px rgba(255, 255, 255, 0.2),
+    0 6px 18px rgba(0, 0, 0, 0.6);
+  transform: translateY(-1px);
+}
+
+.btn-top:active {
+  transform: translateY(0);
 }
 
 .packs-carousel-outer {

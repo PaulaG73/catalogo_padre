@@ -4,7 +4,8 @@
     "title": "N°1 Papá Jardinero",
     "valle": "Valle del Maipo",
     "image": "/img/jardinero.jpg",
-    "price": "$13.000",
+    "price": "$14.990",
+    "priceOferta":"$13.000",
     "bloques": [
       { "tipoCopa": "tinto", "cantidadBotellas": 1, "nombreVino": "Jardinero Mezcla Tinta, Viñateros de Raíz" }
     ]
@@ -14,7 +15,8 @@
     "title": "N°2 Papa Testarudo",
     "valle": "Valle de Cachapoal",
     "image": "/img/testarudo.jpg",
-    "price": "$15.000",
+    "price": "$17.990",
+    "priceOferta":"$14.000",
     "bloques": [
       { "tipoCopa": "tinto", "cantidadBotellas": 1, "nombreVino": "Mala Testa, Garnache/Syrah/Mourvedre, by Algorta" }
     ]
@@ -24,7 +26,8 @@
     "title": "N°3 Papá Infaltable",
     "valle": "Valle del Maipo",
     "image": "/img/infaltable.jpg",
-    "price": "$15.000",
+    "price": "$18.990",
+    "priceOferta":"$15.000",
     "bloques": [
       { "tipoCopa": "tinto", "cantidadBotellas": 1, "nombreVino": "El Infaltable Carménère, Mujer Andina Wines" }
     ]
@@ -34,7 +37,8 @@
     "title": "N°4 Papá Decidido",
     "valle": "Valle del Maipo",
     "image": "/img/decidido.jpg",
-    "price": "$35.000",
+    "price": "$39.990",
+    "priceOferta":"$35.000",
     "bloques": [
       { "tipoCopa": "tinto", "cantidadBotellas": 1, "nombreVino": "Voy, by Sergio Hormazábal, Cabernet Sauvignon, Viñateros de Raíz" }
     ]
@@ -44,7 +48,8 @@
     "title": "N°5 Papá Doblemente Infaltable",
     "valle": "Valle del Maipo",
     "image": "/img/doble_infaltable.jpg",
-    "price": "$28.000",
+    "price": "$37.980",
+    "priceOferta":"$29.000",
     "bloques": [
       { "tipoCopa": "tinto", "cantidadBotellas": 2, "nombreVino": "El Infaltable Carménère, Mujer Andina Wines" }
     ]
@@ -54,7 +59,8 @@
     "title": "N°6 Papá Winemaker",
     "valle": "Valle de Rapel",
     "image": "/img/winemaker.jpg",
-    "price": "$30.000",
+    "price": "$37.980",
+    "priceOferta":"$30.000",
     "bloques": [
       { "tipoCopa": "tinto", "cantidadBotellas": 1, "nombreVino": "Winemaker Series, Wild Carménère, Viña Algorta" },
       { "tipoCopa": "tinto", "cantidadBotellas": 1, "nombreVino": "Winemaker Series, The Blend, Viña Algorta" }
@@ -65,7 +71,8 @@
     "title": "N°7 Papá Catador",
     "valle": "Valle de Rapel",
     "image": "/img/catador.jpg",
-    "price": "$35.000",
+    "price": "$39.970",
+    "priceOferta":"$35.000",
     "bloques": [
       { "tipoCopa": "tinto", "cantidadBotellas": 1, "nombreVino": "Grand Reserve, Carménère, Viña Algorta" },
       { "tipoCopa": "tinto", "cantidadBotellas": 1, "nombreVino": "Family Reserve, Cabernet Sauvignon, Viña Algorta" },
@@ -77,7 +84,8 @@
     "title": "N°8 Papá Anfitrión",
     "valle": "Valles del Maipo y Bío Bío",
     "image": "/img/anfitrión.jpg",
-    "price": "$38.000",
+    "price": "$47.970",
+    "priceOferta":"$38.000",
     "bloques": [
       { "tipoCopa": "espumante", "cantidadBotellas": 1, "nombreVino": "Ai! Brut, Chardonnay/Pinnot Noir Mujer Andina Wines" },
       { "tipoCopa": "rosado", "cantidadBotellas": 1, "nombreVino": "Keluna Rosé, Cabernet Sauvignon/Cabernet Franc, Mujer Andina Wines" },
@@ -89,7 +97,8 @@
     "title": "N°9 Papá Conocedor",
     "valle": "Valle del Maipo",
     "image": "/img/conocedor.jpg",
-    "price": "$43.000",
+    "price": "$52.970",
+    "priceOferta":"$43.000",
     "bloques": [
       { "tipoCopa": "tinto", "cantidadBotellas": 1, "nombreVino": "Jardinero Mezcla Tinta, Viñateros de Raíz" },
       { "tipoCopa": "tinto", "cantidadBotellas": 1, "nombreVino": "El Infaltable Carménère, Mujer Andina Wines" },
@@ -101,7 +110,8 @@
     "title": "N°10 Papá Noble",
     "valle": "Valle de Rapel",
     "image": "/img/noble.jpg",
-    "price": "$40.000",
+    "price": "$53.940",
+    "priceOferta":"$40.000",
     "bloques": [
       { "tipoCopa": "tinto", "cantidadBotellas": 3, "nombreVino": "Grand Reserve, Carménère, Viña Algorta" },
       { "tipoCopa": "tinto", "cantidadBotellas": 3, "nombreVino": "Grand Reserve, Cabernet Sauvignon, Viña Algorta" }
@@ -110,16 +120,17 @@
   {
     "id": "11",
     "title": "N°11 Papá Coleccionista",
-    "valle": "Valle de Rapel",
+    "valle": "Valle de Rapel - Viña Algorta",
     "image": "/img/coleccionista.jpg",
-    "price": "$50.000",
+    "price": "$79.940",
+    "priceOferta":"$50.000",
     "bloques": [
-      { "tipoCopa": "tinto", "cantidadBotellas": 1, "nombreVino": "Grand Reserve, Carménère, Viña Algorta" },
-      { "tipoCopa": "tinto", "cantidadBotellas": 1, "nombreVino": "Grand Reserve, Cabernet Sauvignon, Viña Algorta" },
-      { "tipoCopa": "tinto", "cantidadBotellas": 1, "nombreVino": "Family Reserve, Carménère, Viña Algorta" },
-      { "tipoCopa": "tinto", "cantidadBotellas": 1, "nombreVino": "Family Reserve, Cabernet Sauvignon, Viña Algorta" },
-      { "tipoCopa": "tinto", "cantidadBotellas": 1, "nombreVino": "Winemaker Series, Wild Carménère, Viña Algorta" },
-      { "tipoCopa": "tinto", "cantidadBotellas": 1, "nombreVino": "Winemaker Series, The Blend, Viña Algorta" }
+      { "tipoCopa": "tinto", "cantidadBotellas": 1, "nombreVino": "Grand Reserve, Carménère" },
+      { "tipoCopa": "tinto", "cantidadBotellas": 1, "nombreVino": "Grand Reserve, Cabernet Sauvignon" },
+      { "tipoCopa": "tinto", "cantidadBotellas": 1, "nombreVino": "Family Reserve, Carménère" },
+      { "tipoCopa": "tinto", "cantidadBotellas": 1, "nombreVino": "Family Reserve, Cabernet Sauvignon" },
+      { "tipoCopa": "tinto", "cantidadBotellas": 1, "nombreVino": "Winemaker Series, Wild Carménère" },
+      { "tipoCopa": "tinto", "cantidadBotellas": 1, "nombreVino": "Winemaker Series, The Blend" }
     ]
   },
   {
@@ -127,7 +138,8 @@
     "title": "N°12 Papá Innovador",
     "valle": "Valles del Maipo y Cachapoal",
     "image": "/img/innovacion.jpg",
-    "price": "$70.000",
+    "price": "$103.940",
+    "priceOferta":"$70.000",
     "bloques": [
       { "tipoCopa": "tinto", "cantidadBotellas": 2, "nombreVino": "El Infaltable Carménère, Mujer Andina Wines" },
       { "tipoCopa": "tinto", "cantidadBotellas": 2, "nombreVino": "Jardinero Touriga Nacional, Viñateros de Raíz" },

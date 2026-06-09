@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build": "node scripts/generate-pack-og-pages.cjs && vue-cli-service build",
+    "generate-pack-og": "node scripts/generate-pack-og-pages.cjs",
     "lint": "vue-cli-service lint",
     "fix-logo": "node scripts/knockout-white-logo.cjs",
     "optimize-pack-og": "node scripts/optimize-pack-share-images.cjs"

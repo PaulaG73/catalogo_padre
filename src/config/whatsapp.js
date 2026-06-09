@@ -60,33 +60,23 @@ function packOgPagePath(packId) {
   return `og-${id.toLowerCase()}${OG_PAGE_SUFFIX}`
 }
 
-/** Slug de página OG por id de pack (actual y legacy). */
+/** Slug de página OG por id de pack (`public/og-pack-{id}.html`). */
 const OG_SLUG_BY_PACK_ID = {
-  '1': 'alchemysta',
-  '2': 'mujer-andina',
-  '3': 'rose',
-  '4': 'owm',
-  '5': 'algorta',
-  /** Tripack N°6 (no usar slug genérico `rockstar`: evita caché OG / confusión con caja N°9 Rock Stars). */
-  '6': 'tripack-rockstars',
-  '7': 'sensaciones',
-  '8': 'maiporigen',
-  '10': 'algorta-grand-reserve',
-  '11': 'coleccionalgorta',
-  '12': 'innovacion',
-  alchemysta: 'alchemysta',
-  'mujer-andina': 'mujer-andina',
-  rose: 'rose',
-  owm: 'owm',
-  algorta: 'algorta',
-  rockstar: 'tripack-rockstars',
-  'tripack-rockstars': 'tripack-rockstars',
-  sensaciones: 'sensaciones',
-  maiporigen: 'maiporigen',
-  'algorta-grand-reserve': 'algorta-grand-reserve',
-  coleccionalgorta: 'coleccionalgorta',
-  innovacion: 'innovacion',
+  '1': 'pack-1',
+  '2': 'pack-2',
+  '3': 'pack-3',
+  '4': 'pack-4',
+  '5': 'pack-5',
+  '6': 'pack-6',
+  '7': 'pack-7',
+  '8': 'pack-8',
+  '9': 'pack-9',
+  '10': 'pack-10',
+  '11': 'pack-11',
+  '12': 'pack-12',
 }
+
+const PRECIO_DIA_PADRE_LABEL = 'Precio especial Día del Padre'
 
 function ogSlugFromPackId(packId) {
   const id = typeof packId === 'string' ? packId.trim().toLowerCase() : ''
@@ -183,8 +173,8 @@ export function getWhatsAppFooterUrl() {
 }
 
 /**
- * Enlace api.whatsapp.com: «¿Vamos con este pack?» + datos del pack + vista previa + precio.
- * @param {{ title?: string, valle?: string, price?: string, ofertaEtiqueta?: string, image?: string, packId?: string }} pack
+ * Enlace api.whatsapp.com: «¿Vamos con este regalo?» + datos del pack + vista previa + precio.
+ * @param {{ title?: string, valle?: string, price?: string, precioDiaPadre?: boolean, image?: string, packId?: string }} pack
  */
 export function getWhatsAppPackUrl(pack) {
   const digits = digitsOnly()
@@ -193,11 +183,10 @@ export function getWhatsAppPackUrl(pack) {
   const title = typeof pack?.title === 'string' ? pack.title.trim() : ''
   const valle = typeof pack?.valle === 'string' ? pack.valle.trim() : ''
   const price = typeof pack?.price === 'string' ? pack.price.trim() : ''
-  const ofertaEtiqueta =
-    typeof pack?.ofertaEtiqueta === 'string' ? pack.ofertaEtiqueta.trim() : ''
+  const precioDiaPadre = Boolean(pack?.precioDiaPadre)
   const previewUrl = resolvePackPreviewUrlForWhatsApp(pack?.packId, pack?.image || '')
 
-  const parts = ['¿Vamos con este pack?']
+  const parts = ['¿Vamos con este regalo?']
   if (title) parts.push(title)
   if (valle) parts.push(valle)
   parts.push('')
@@ -209,8 +198,8 @@ export function getWhatsAppPackUrl(pack) {
 
   const priceTxt = priceForWhatsAppMessage(price)
   if (priceTxt) {
-    if (ofertaEtiqueta) {
-      parts.push(`${ofertaEtiqueta} (CLP): ${priceTxt}`)
+    if (precioDiaPadre) {
+      parts.push(`${PRECIO_DIA_PADRE_LABEL} (CLP): ${priceTxt}`)
     } else {
       parts.push(`Precio (CLP): ${priceTxt}`)
     }
