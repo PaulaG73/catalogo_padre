@@ -4,6 +4,7 @@
   <section id="sobre-mi" class="home-section sobre-mi-section--light py-1 py-md-2">
     <div class="container sobre-mi">
       <div class="sobre-mi-media">
+        <div class="sobre-mi-cluster">
         <img
           class="sobre-mi-hero-img"
           src="/img/imagen_pap%C3%A1.jpg"
@@ -13,12 +14,13 @@
           loading="lazy"
           decoding="async"
         >
+        <div class="sobre-mi-dedicatoria-wrap">
         <p class="sobre-mi-dedicatoria">
-          Por el cariño y la admiración hacia quienes son
-          <span class="sobre-mi-dedicatoria--destacado">padres de verdad</span>...
-          <span class="sobre-mi-dedicatoria-part">los que <span class="sobre-mi-dedicatoria--destacado">cuidan</span>, los que <span class="sobre-mi-dedicatoria--destacado">acompañan</span>, los que <span class="sobre-mi-dedicatoria--destacado">dejan huella</span>...</span>
-          <span class="sobre-mi-dedicatoria-part">más allá de cualquier nombre o lazo.</span>
+          <span class="sobre-mi-dedicatoria-line">Por el cariño y la admiración hacia quienes son <span class="sobre-mi-dedicatoria--destacado">padres de verdad</span>...</span>
+          <span class="sobre-mi-dedicatoria-line">los que <span class="sobre-mi-dedicatoria--destacado">cuidan</span>, los que <span class="sobre-mi-dedicatoria--destacado">acompañan</span>, los que <span class="sobre-mi-dedicatoria--destacado">dejan huella</span>...</span>
+          <span class="sobre-mi-dedicatoria-line">más allá de cualquier nombre o lazo.</span>
         </p>
+        </div>
         <img
           class="sobre-mi-logo"
           src="/img/logo-vinologa.png"
@@ -28,12 +30,14 @@
           loading="lazy"
           decoding="async"
         >
+        </div>
       </div>
     </div>
   </section>
   <section id="packs" class="home-section home-section--slate pt-4 pt-md-5 pb-2 pb-md-3">
-    <div class="container text-center">
-      <h3 class="packs-titulo mb-4 fw-bold">Elige un regalo para Papá...</h3>
+    <div class="container text-center packs-encabezado">
+      <h3 class="packs-titulo mb-1 fw-bold">Cada uno tiene su estilo</h3>
+      <p class="packs-subtitulo mb-4">Elige el regalo para quien quieras homenajear — una botella o un pack</p>
     </div>
     <div
       class="packs-carousel-outer d-flex align-items-center gap-2 gap-sm-3 px-2 px-sm-3"
@@ -402,6 +406,20 @@ onUnmounted(() => {
 }
 
 /* Línea burdeos + corazón bajo el título del carrusel (Día del Padre) */
+#packs .packs-encabezado {
+  max-width: 42rem;
+}
+
+#packs .packs-subtitulo {
+  margin: 0 auto;
+  max-width: 36rem;
+  font-family: 'Nunito', system-ui, sans-serif;
+  font-size: clamp(0.88rem, 2.4vw, 1.05rem);
+  font-weight: 500;
+  line-height: 1.45;
+  color: var(--vin-texto-muted);
+}
+
 #packs .packs-titulo {
   padding-bottom: 1.35rem;
 }
@@ -529,57 +547,34 @@ onUnmounted(() => {
   background-color: #fff;
 }
 
-@media (max-width: 767.98px) {
-  #sobre-mi.sobre-mi-section--light {
-    padding-top: 0.35rem !important;
-    padding-bottom: 0.35rem !important;
-  }
-
-  #sobre-mi .sobre-mi-media {
-    gap: 0.5rem;
-  }
-
-  #sobre-mi .sobre-mi-dedicatoria {
-    max-width: 18.5rem;
-    font-size: clamp(0.78rem, 2.1vw, 0.88rem);
-    line-height: 1.4;
-  }
-
-  #sobre-mi .sobre-mi-hero-img {
-    width: clamp(120px, 38vw, 200px);
-  }
-
-  #sobre-mi .sobre-mi-logo {
-    width: clamp(72px, 22vw, 96px);
-    height: clamp(72px, 22vw, 96px);
-  }
+#sobre-mi .sobre-mi-media {
+  display: flex;
+  justify-content: center;
+  width: 100%;
 }
 
-#sobre-mi .sobre-mi-media {
+#sobre-mi .sobre-mi-cluster {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: clamp(0.85rem, 3vw, 1.75rem);
+  gap: clamp(0.55rem, 2vw, 1.25rem);
   text-align: center;
-}
-
-@media (min-width: 768px) {
-  #sobre-mi .sobre-mi-media {
-    flex-direction: row;
-    gap: clamp(1rem, 3vw, 2rem);
-  }
+  max-width: 100%;
 }
 
 #sobre-mi .sobre-mi-dedicatoria {
   margin: 0;
-  max-width: 22rem;
   text-align: center;
   font-family: 'Nunito', system-ui, sans-serif;
-  font-size: clamp(0.9rem, 2.4vw, 1.05rem);
   font-weight: 600;
-  line-height: 1.55;
+  line-height: 1.3;
   color: var(--vin-profundo);
+}
+
+#sobre-mi .sobre-mi-dedicatoria-line {
+  display: block;
+  white-space: nowrap;
 }
 
 #sobre-mi .sobre-mi-dedicatoria--destacado {
@@ -588,28 +583,142 @@ onUnmounted(() => {
   font-style: italic;
 }
 
-#sobre-mi .sobre-mi-dedicatoria-part {
-  display: block;
-}
-
 #sobre-mi .sobre-mi-hero-img {
   display: block;
-  width: clamp(155px, 48vw, 330px);
   max-width: 100%;
   height: auto;
   object-fit: contain;
-  flex-shrink: 0;
 }
 
 #sobre-mi .sobre-mi-logo {
   display: block;
-  width: clamp(100px, 32vw, 180px);
-  height: clamp(100px, 32vw, 180px);
   object-fit: cover;
   object-position: center;
   border-radius: 50%;
-  flex-shrink: 0;
   box-shadow: 0 0 0 2px rgba(109, 44, 53, 0.15);
+}
+
+@media (max-width: 767.98px) {
+  #sobre-mi.sobre-mi-section--light {
+    padding-top: 0.35rem !important;
+    padding-bottom: 0.35rem !important;
+  }
+
+  #sobre-mi .sobre-mi-cluster {
+    gap: 0.45rem;
+  }
+
+  #sobre-mi .sobre-mi-dedicatoria {
+    width: min(100%, 22rem);
+    font-size: clamp(0.5rem, 3.1vw, 0.78rem);
+  }
+
+  #sobre-mi .sobre-mi-hero-img {
+    width: clamp(96px, 30vw, 160px);
+    flex-shrink: 1;
+    min-width: 0;
+  }
+
+  #sobre-mi .sobre-mi-logo {
+    width: clamp(60px, 18vw, 84px);
+    height: clamp(60px, 18vw, 84px);
+    flex-shrink: 1;
+    min-width: 0;
+  }
+}
+
+@media (max-width: 359.98px) {
+  #sobre-mi .sobre-mi-dedicatoria {
+    font-size: 0.48rem;
+    max-width: 20rem;
+  }
+
+  #sobre-mi .sobre-mi-hero-img {
+    width: clamp(84px, 27vw, 120px);
+  }
+
+  #sobre-mi .sobre-mi-logo {
+    width: clamp(52px, 16vw, 72px);
+    height: clamp(52px, 16vw, 72px);
+  }
+}
+
+@media (min-width: 768px) {
+  #sobre-mi .sobre-mi.container {
+    max-width: 100%;
+    padding-inline: 30px;
+  }
+
+  #sobre-mi .sobre-mi-media {
+    width: 100%;
+  }
+
+  #sobre-mi .sobre-mi-cluster {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: none;
+    gap: 0;
+  }
+
+  #sobre-mi .sobre-mi-hero-img {
+    flex: 0 0 auto;
+    flex-shrink: 0;
+    width: clamp(96px, 10vw, 168px);
+    margin: 0;
+  }
+
+  #sobre-mi .sobre-mi-dedicatoria-wrap {
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-inline: clamp(1.5rem, 3vw, 2.5rem);
+  }
+
+  #sobre-mi .sobre-mi-dedicatoria {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    font-size: clamp(0.74rem, 1vw, 1rem);
+    text-align: center;
+  }
+
+  #sobre-mi .sobre-mi-logo {
+    flex: 0 0 auto;
+    flex-shrink: 0;
+    width: clamp(64px, 7vw, 112px);
+    height: clamp(64px, 7vw, 112px);
+    margin: 0;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991.98px) {
+  #sobre-mi .sobre-mi-hero-img {
+    width: clamp(92px, 9.5vw, 124px);
+  }
+
+  #sobre-mi .sobre-mi-dedicatoria-wrap {
+    padding-inline: 1.75rem;
+  }
+
+  #sobre-mi .sobre-mi-dedicatoria {
+    font-size: clamp(0.66rem, 1.85vw, 0.76rem);
+  }
+
+  #sobre-mi .sobre-mi-logo {
+    width: clamp(60px, 6.5vw, 80px);
+    height: clamp(60px, 6.5vw, 80px);
+  }
+}
+
+@media (min-width: 1024px) {
+  #sobre-mi .sobre-mi-dedicatoria {
+    font-size: 1.25rem;
+  }
 }
 
 .highlight {
