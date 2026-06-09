@@ -3,17 +3,17 @@
     "id": "1",
     "title": "N°1 Papá Jardinero",
     "valle": "Valle del Maipo",
-    "image": "/img/Blancos.jpg",
+    "image": "/img/jardinero.jpg",
     "price": "$13.000",
     "bloques": [
-      { "tipoCopa": "tinto", "cantidadBotellas": 1, "nombreVino": "Jardinero Touriga Nacional, Viñateros de Raíz" }
+      { "tipoCopa": "tinto", "cantidadBotellas": 1, "nombreVino": "Jardinero Mezcla Tinta, Viñateros de Raíz" }
     ]
   },
   {
     "id": "2",
     "title": "N°2 Papa Testarudo",
-    "valle": "Valle de Cachapoal Andes",
-    "image": "/img/Espumantes.jpg",
+    "valle": "Valle de Cachapoal",
+    "image": "/img/testarudo.jpg",
     "price": "$15.000",
     "bloques": [
       { "tipoCopa": "tinto", "cantidadBotellas": 1, "nombreVino": "Mala Testa, Garnache/Syrah/Mourvedre, by Algorta" }
@@ -23,7 +23,7 @@
     "id": "3",
     "title": "N°3 Papá Infaltable",
     "valle": "Valle del Maipo",
-    "image": "/img/Rosados.jpg",
+    "image": "/img/infaltable.jpg",
     "price": "$15.000",
     "bloques": [
       { "tipoCopa": "tinto", "cantidadBotellas": 1, "nombreVino": "El Infaltable Carménère, Mujer Andina Wines" }
@@ -33,7 +33,7 @@
     "id": "4",
     "title": "N°4 Papá Decidido",
     "valle": "Valle del Maipo",
-    "image": "/img/Tintos.jpg",
+    "image": "/img/decidido.jpg",
     "price": "$35.000",
     "bloques": [
       { "tipoCopa": "tinto", "cantidadBotellas": 1, "nombreVino": "Voy, by Sergio Hormazábal, Cabernet Sauvignon, Viñateros de Raíz" }
@@ -43,7 +43,7 @@
     "id": "5",
     "title": "N°5 Papá Doblemente Infaltable",
     "valle": "Valle del Maipo",
-    "image": "/img/Rosados.jpg",
+    "image": "/img/doble_infaltable.jpg",
     "price": "$28.000",
     "bloques": [
       { "tipoCopa": "tinto", "cantidadBotellas": 2, "nombreVino": "El Infaltable Carménère, Mujer Andina Wines" }
@@ -53,7 +53,7 @@
     "id": "6",
     "title": "N°6 Papá Winemaker",
     "valle": "Valle de Rapel",
-    "image": "/img/Tintos_SP.jpg",
+    "image": "/img/winemaker.jpg",
     "price": "$30.000",
     "bloques": [
       { "tipoCopa": "tinto", "cantidadBotellas": 1, "nombreVino": "Winemaker Series, Wild Carménère, Viña Algorta" },
@@ -64,7 +64,7 @@
     "id": "7",
     "title": "N°7 Papá Catador",
     "valle": "Valle de Rapel",
-    "image": "/img/coleccion-algorta.jpg",
+    "image": "/img/catador.jpg",
     "price": "$35.000",
     "bloques": [
       { "tipoCopa": "tinto", "cantidadBotellas": 1, "nombreVino": "Grand Reserve, Carménère, Viña Algorta" },
@@ -76,7 +76,7 @@
     "id": "8",
     "title": "N°8 Papá Anfitrión",
     "valle": "Valles del Maipo y Bío Bío",
-    "image": "/img/Rosados.jpg",
+    "image": "/img/anfitrión.jpg",
     "price": "$38.000",
     "bloques": [
       { "tipoCopa": "espumante", "cantidadBotellas": 1, "nombreVino": "Ai! Brut, Chardonnay/Pinnot Noir Mujer Andina Wines" },
@@ -88,7 +88,7 @@
     "id": "9",
     "title": "N°9 Papá Conocedor",
     "valle": "Valle del Maipo",
-    "image": "/img/tripack_Maiporigen.jpg",
+    "image": "/img/conocedor.jpg",
     "price": "$43.000",
     "bloques": [
       { "tipoCopa": "tinto", "cantidadBotellas": 1, "nombreVino": "Jardinero Mezcla Tinta, Viñateros de Raíz" },
@@ -100,7 +100,7 @@
     "id": "10",
     "title": "N°10 Papá Noble",
     "valle": "Valle de Rapel",
-    "image": "/img/GR_Algorta.jpg",
+    "image": "/img/noble.jpg",
     "price": "$40.000",
     "bloques": [
       { "tipoCopa": "tinto", "cantidadBotellas": 3, "nombreVino": "Grand Reserve, Carménère, Viña Algorta" },
@@ -111,7 +111,7 @@
     "id": "11",
     "title": "N°11 Papá Coleccionista",
     "valle": "Valle de Rapel",
-    "image": "/img/coleccion-algorta.jpg",
+    "image": "/img/coleccionista.jpg",
     "price": "$50.000",
     "bloques": [
       { "tipoCopa": "tinto", "cantidadBotellas": 1, "nombreVino": "Grand Reserve, Carménère, Viña Algorta" },
@@ -125,8 +125,8 @@
   {
     "id": "12",
     "title": "N°12 Papá Innovador",
-    "valle": "Valles del Maipo y Cachapoal Andes",
-    "image": "/img/coleccion-algorta.jpg",
+    "valle": "Valles del Maipo y Cachapoal",
+    "image": "/img/innovacion.jpg",
     "price": "$70.000",
     "bloques": [
       { "tipoCopa": "tinto", "cantidadBotellas": 2, "nombreVino": "El Infaltable Carménère, Mujer Andina Wines" },

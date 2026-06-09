@@ -13,6 +13,12 @@
           loading="lazy"
           decoding="async"
         >
+        <p class="sobre-mi-dedicatoria">
+          Por el cariño y la admiración hacia quienes son
+          <span class="sobre-mi-dedicatoria--destacado">padres de verdad</span>...
+          <span class="sobre-mi-dedicatoria-part">los que <span class="sobre-mi-dedicatoria--destacado">cuidan</span>, los que <span class="sobre-mi-dedicatoria--destacado">acompañan</span>, los que <span class="sobre-mi-dedicatoria--destacado">dejan huella</span>...</span>
+          <span class="sobre-mi-dedicatoria-part">más allá de cualquier nombre o lazo.</span>
+        </p>
         <img
           class="sobre-mi-logo"
           src="/img/logo-vinologa.png"
@@ -525,10 +531,39 @@ onUnmounted(() => {
 
 #sobre-mi .sobre-mi-media {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: clamp(1rem, 4vw, 2.5rem);
+  gap: clamp(0.85rem, 3vw, 1.75rem);
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  #sobre-mi .sobre-mi-media {
+    flex-direction: row;
+    gap: clamp(1rem, 3vw, 2rem);
+  }
+}
+
+#sobre-mi .sobre-mi-dedicatoria {
+  margin: 0;
+  max-width: 22rem;
+  text-align: center;
+  font-family: 'Nunito', system-ui, sans-serif;
+  font-size: clamp(0.9rem, 2.4vw, 1.05rem);
+  font-weight: 600;
+  line-height: 1.55;
+  color: var(--vin-profundo);
+}
+
+#sobre-mi .sobre-mi-dedicatoria--destacado {
+  color: var(--vin-acento);
+  font-weight: 800;
+  font-style: italic;
+}
+
+#sobre-mi .sobre-mi-dedicatoria-part {
+  display: block;
 }
 
 #sobre-mi .sobre-mi-hero-img {
