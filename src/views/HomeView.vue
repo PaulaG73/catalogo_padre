@@ -205,31 +205,73 @@ function onCarouselFocusOut(ev) {
   }, 400)
 }
 
+function getCarouselSlides(el) {
+  const inner = el.querySelector('.packs-carousel-inner')
+  if (!inner) return []
+  return [...inner.querySelectorAll('.packs-carousel-slide')]
+}
+
+/** Índice del snap más cercano a scrollLeft (usa offsetLeft real del layout). */
+function nearestCarouselSlideIndex(slides, scrollLeft) {
+  if (!slides.length) return 0
+  let best = 0
+  let bestDist = Infinity
+  for (let i = 0; i < slides.length; i++) {
+    const dist = Math.abs(slides[i].offsetLeft - scrollLeft)
+    if (dist < bestDist) {
+      bestDist = dist
+      best = i
+    }
+  }
+  return best
+}
+
+/** Safari iOS: smooth + scroll-snap mandatory desalinean flechas tras auto-scroll fraccionario. */
+function carouselArrowScrollInstant() {
+  if (reduceMotion.value) return true
+  if (typeof navigator === 'undefined') return false
+  const ua = navigator.userAgent
+  const iOS =
+    /iPad|iPhone|iPod/.test(ua) ||
+    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
+  return iOS
+}
+
 function scrollCarousel(direction) {
   const el = carouselRef.value
   if (!el) return
   pauseCarousel()
   if (arrowResumeTimer) clearTimeout(arrowResumeTimer)
 
-  const inner = el.querySelector('.packs-carousel-inner')
-  const firstSlide = inner?.querySelector('.packs-carousel-slide')
-  let delta = el.clientWidth * direction
-  if (inner && firstSlide) {
-    const gapPx = parseFloat(getComputedStyle(inner).gap) || 0
-    const slideW = firstSlide.offsetWidth
-    const threeCols = window.matchMedia('(min-width: 768px)').matches
-    /* Móvil: un avance = 1 tarjeta + hueco; desktop: el viewport ya encaja 3 enteras */
-    if (!threeCols) delta = (slideW + gapPx) * direction
+  const slides = getCarouselSlides(el)
+  if (!slides.length) return
+
+  const threeCols = window.matchMedia('(min-width: 768px)').matches
+  const step = threeCols ? 3 : 1
+  const currentIdx = nearestCarouselSlideIndex(slides, el.scrollLeft)
+  const snappedLeft = slides[currentIdx].offsetLeft
+
+  /* Corrige deriva del auto-scroll antes de calcular el destino */
+  el.scrollLeft = snappedLeft
+
+  const targetIdx = Math.max(0, Math.min(slides.length - 1, currentIdx + direction * step))
+  const targetLeft = slides[targetIdx].offsetLeft
+  const behavior = carouselArrowScrollInstant() ? 'auto' : 'smooth'
+
+  const applyScroll = () => {
+    el.scrollTo({ left: targetLeft, behavior })
   }
 
-  el.scrollBy({
-    left: delta,
-    behavior: reduceMotion.value ? 'auto' : 'smooth',
-  })
+  if (behavior === 'smooth') {
+    requestAnimationFrame(applyScroll)
+  } else {
+    applyScroll()
+  }
+
   arrowResumeTimer = setTimeout(() => {
     carouselPaused.value = false
     arrowResumeTimer = null
-  }, 3200)
+  }, behavior === 'smooth' ? 3200 : 800)
 }
 
 function tick() {
