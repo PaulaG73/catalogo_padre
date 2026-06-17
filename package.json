@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
+    "serve": "node scripts/serve-with-browser.cjs",
+    "serve:vue": "vue-cli-service serve",
+    "open:app": "node scripts/open-dev-browser.cjs",
     "build": "node scripts/generate-pack-og-pages.cjs && vue-cli-service build",
     "generate-pack-og": "node scripts/generate-pack-og-pages.cjs",
     "lint": "vue-cli-service lint",

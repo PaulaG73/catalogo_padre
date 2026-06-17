@@ -68,7 +68,19 @@
   },
   {
     "id": "7",
-    "title": "N°7 Papá Catador",
+    "title": "N°7 Papá Mundialero",
+    "valle": "Valle de Rapel",
+    "image": "/img/mundialero.jpg",
+    "price": "$26.970",
+    "priceOferta":"$21.000",
+    "bloques": [
+      { "tipoCopa": "tinto", "cantidadBotellas": 1, "nombreVino": "Grand Reserve, Carménère, Viña Algorta" },
+      { "tipoCopa": "tinto", "cantidadBotellas": 2, "nombreVino": "Grand Reserve, Cabernet Sauvignon, Viña Algorta" }
+    ]
+  },
+  {
+    "id": "8",
+    "title": "N°8 Papá Catador",
     "valle": "Valle de Rapel",
     "image": "/img/catador.jpg",
     "price": "$39.970",
@@ -80,8 +92,8 @@
     ]
   },
   {
-    "id": "8",
-    "title": "N°8 Papá Anfitrión",
+    "id": "9",
+    "title": "N°9 Papá Anfitrión",
     "valle": "Valles del Maipo y Bío Bío",
     "image": "/img/anfitrión.jpg",
     "price": "$47.970",
@@ -93,8 +105,8 @@
     ]
   },
   {
-    "id": "9",
-    "title": "N°9 Papá Conocedor",
+    "id": "10",
+    "title": "N°10 Papá Conocedor",
     "valle": "Valle del Maipo",
     "image": "/img/conocedor.jpg",
     "price": "$52.970",
@@ -103,18 +115,6 @@
       { "tipoCopa": "tinto", "cantidadBotellas": 1, "nombreVino": "Jardinero Mezcla Tinta, Viñateros de Raíz" },
       { "tipoCopa": "tinto", "cantidadBotellas": 1, "nombreVino": "El Infaltable Carménère, Mujer Andina Wines" },
       { "tipoCopa": "tinto", "cantidadBotellas": 1, "nombreVino": "Jardinero Touriga Nacional, Viñateros de Raíz" }
-    ]
-  },
-  {
-    "id": "10",
-    "title": "N°10 Papá Parrillero",
-    "valle": "Valle de Rapel",
-    "image": "/img/parrillero.jpg",
-    "price": "$53.940",
-    "priceOferta":"$40.000",
-    "bloques": [
-      { "tipoCopa": "tinto", "cantidadBotellas": 3, "nombreVino": "Grand Reserve, Carménère, Viña Algorta" },
-      { "tipoCopa": "tinto", "cantidadBotellas": 3, "nombreVino": "Grand Reserve, Cabernet Sauvignon, Viña Algorta" }
     ]
   },
   {
