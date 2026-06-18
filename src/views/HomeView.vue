@@ -14,8 +14,8 @@
           loading="lazy"
           decoding="async"
         >
-        <div class="sobre-mi-dedicatoria-wrap">
-        <p class="sobre-mi-dedicatoria">
+        <div ref="sobreMiDedicatoriaWrapRef" class="sobre-mi-dedicatoria-wrap">
+        <p ref="sobreMiDedicatoriaRef" class="sobre-mi-dedicatoria">
           <span class="sobre-mi-dedicatoria-line">Por el cariño y la admiración hacia quienes son <span class="sobre-mi-dedicatoria--destacado">padres de verdad</span>...</span>
           <span class="sobre-mi-dedicatoria-line">los que <span class="sobre-mi-dedicatoria--destacado">cuidan</span>, los que <span class="sobre-mi-dedicatoria--destacado">acompañan</span>, los que <span class="sobre-mi-dedicatoria--destacado">dejan huella</span>...</span>
           <span class="sobre-mi-dedicatoria-line">más allá de cualquier nombre o lazo.</span>
@@ -37,7 +37,27 @@
   <section id="packs" class="home-section home-section--slate pt-4 pt-md-5 pb-2 pb-md-3">
     <div class="container text-center packs-encabezado">
       <h3 class="packs-titulo mb-1 fw-bold">Cada uno tiene su estilo</h3>
-      <p class="packs-subtitulo mb-4">Elige el regalo para quien quieras homenajear — una botella o un pack</p>
+      <p class="packs-subtitulo mb-3">
+        Elige el regalo para quien quieras homenajear — una botella o un pack, y puedes agregar un complemento...
+      </p>
+      <a
+        href="#complementos"
+        class="packs-complementos-cta"
+        aria-label="Desplazarse a la sección de complementos"
+      >
+        <span class="packs-complementos-cta-text">Revisar complementos</span>
+        <svg
+          class="packs-complementos-cta-icon"
+          xmlns="http://www.w3.org/2000/svg"
+          width="18"
+          height="18"
+          fill="currentColor"
+          viewBox="0 0 16 16"
+          aria-hidden="true"
+        >
+          <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+        </svg>
+      </a>
     </div>
     <div
       class="packs-carousel-outer d-flex align-items-center gap-2 gap-sm-3 px-2 px-sm-3"
@@ -114,6 +134,16 @@
     </div>
   </section>
 
+  <section
+    id="complementos"
+    class="home-section home-section--light complementos-section py-3 py-md-4"
+    aria-labelledby="complementos-titulo"
+  >
+    <div class="container text-center">
+      <h3 id="complementos-titulo" class="packs-titulo complementos-titulo fw-bold mb-1">Complementos para tu regalo</h3>
+    </div>
+  </section>
+
   <div class="prefooter-pitch--light">
     <div class="prefooter-pitch container text-center">
       <span class="prefooter-line">Otros vinos y packs disponibles</span>
@@ -133,7 +163,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue'
 import NavBar from '../components/NavBar'
 import FooterComponent from '../components/FooterComponent.vue'
 import CardComponent from '../components/CardComponent.vue'
@@ -143,6 +173,8 @@ import catalogoPacks from '../data/catalogoPack.json'
 const proyectosLoop = computed(() => [...catalogoPacks, ...catalogoPacks])
 
 const carouselRef = ref(null)
+const sobreMiDedicatoriaWrapRef = ref(null)
+const sobreMiDedicatoriaRef = ref(null)
 const carouselPaused = ref(false)
 const reduceMotion = ref(false)
 
@@ -158,6 +190,61 @@ let touchResumeTimer = null
 let focusResumeTimer = null
 let arrowResumeTimer = null
 let carouselResizeObserver = null
+let sobreMiFitRaf = null
+let sobreMiResizeObserver = null
+
+const SOBRE_MI_DEDICATORIA_FS = '--sobre-mi-dedicatoria-fs'
+const SOBRE_MI_DEDICATORIA_MIN_PX = 8
+const SOBRE_MI_DEDICATORIA_MAX_PX = 40
+
+function dedicatoriaLineas() {
+  const dedicatoria = sobreMiDedicatoriaRef.value
+  if (!dedicatoria) return []
+  return dedicatoria.querySelectorAll('.sobre-mi-dedicatoria-line')
+}
+
+function dedicatoriaCabeEnAncho(maxWidth) {
+  const lines = dedicatoriaLineas()
+  if (!lines.length) return false
+  for (const line of lines) {
+    if (line.scrollWidth > maxWidth + 0.5) return false
+  }
+  return true
+}
+
+function fitSobreMiDedicatoria() {
+  const wrap = sobreMiDedicatoriaWrapRef.value
+  const dedicatoria = sobreMiDedicatoriaRef.value
+  if (!wrap || !dedicatoria) return
+
+  const maxWidth = wrap.clientWidth
+  if (maxWidth <= 0) return
+
+  let lo = SOBRE_MI_DEDICATORIA_MIN_PX
+  let hi = SOBRE_MI_DEDICATORIA_MAX_PX
+  let best = lo
+
+  while (lo <= hi) {
+    const mid = Math.floor((lo + hi) / 2)
+    dedicatoria.style.setProperty(SOBRE_MI_DEDICATORIA_FS, `${mid}px`)
+    if (dedicatoriaCabeEnAncho(maxWidth)) {
+      best = mid
+      lo = mid + 1
+    } else {
+      hi = mid - 1
+    }
+  }
+
+  dedicatoria.style.setProperty(SOBRE_MI_DEDICATORIA_FS, `${best}px`)
+}
+
+function scheduleFitSobreMiDedicatoria() {
+  if (sobreMiFitRaf != null) return
+  sobreMiFitRaf = requestAnimationFrame(() => {
+    sobreMiFitRaf = null
+    fitSobreMiDedicatoria()
+  })
+}
 
 function syncCarouselInlineSize() {
   const el = carouselRef.value
@@ -306,13 +393,24 @@ function tick() {
   rafId = requestAnimationFrame(tick)
 }
 
-onMounted(() => {
+onMounted(async () => {
   reduceMotion.value = window.matchMedia('(prefers-reduced-motion: reduce)').matches
   syncCarouselInlineSize()
   const el = carouselRef.value
   if (el && typeof ResizeObserver !== 'undefined') {
     carouselResizeObserver = new ResizeObserver(() => scheduleSyncCarouselInlineSize())
     carouselResizeObserver.observe(el)
+  }
+  await nextTick()
+  if (typeof ResizeObserver !== 'undefined' && sobreMiDedicatoriaWrapRef.value) {
+    sobreMiResizeObserver = new ResizeObserver(() => scheduleFitSobreMiDedicatoria())
+    sobreMiResizeObserver.observe(sobreMiDedicatoriaWrapRef.value)
+  }
+  const runFitSobreMi = () => scheduleFitSobreMiDedicatoria()
+  if (document.fonts?.ready) {
+    document.fonts.ready.then(runFitSobreMi)
+  } else {
+    runFitSobreMi()
   }
   rafId = requestAnimationFrame(tick)
 })
@@ -322,8 +420,14 @@ onUnmounted(() => {
     cancelAnimationFrame(syncCarouselRaf)
     syncCarouselRaf = null
   }
+  if (sobreMiFitRaf != null) {
+    cancelAnimationFrame(sobreMiFitRaf)
+    sobreMiFitRaf = null
+  }
   carouselResizeObserver?.disconnect()
   carouselResizeObserver = null
+  sobreMiResizeObserver?.disconnect()
+  sobreMiResizeObserver = null
   cancelAnimationFrame(rafId)
   if (touchResumeTimer) clearTimeout(touchResumeTimer)
   if (focusResumeTimer) clearTimeout(focusResumeTimer)
@@ -480,11 +584,85 @@ onUnmounted(() => {
   color: var(--vin-texto-muted);
 }
 
-#packs .packs-titulo {
+#packs .packs-complementos-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  margin: 0 auto 1.35rem;
+  padding: 0.48rem 1.05rem 0.52rem;
+  border-radius: 2rem;
+  font-family: 'Nunito', system-ui, sans-serif;
+  font-size: clamp(0.78rem, 2.1vw, 0.92rem);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+  text-decoration: none;
+  color: #fff;
+  background: linear-gradient(145deg, var(--vin-acento, #6d2c35), var(--vin-profundo, #3a0f18));
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow:
+    0 0 0 1px rgba(var(--vin-acento-rgb), 0.35),
+    0 4px 16px rgba(0, 0, 0, 0.35);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+#packs .packs-complementos-cta:hover,
+#packs .packs-complementos-cta:focus-visible {
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow:
+    0 0 0 2px rgba(255, 255, 255, 0.15),
+    0 6px 20px rgba(0, 0, 0, 0.45);
+}
+
+#packs .packs-complementos-cta:active {
+  transform: translateY(0);
+}
+
+#packs .packs-complementos-cta-icon {
+  flex-shrink: 0;
+  animation: packs-complementos-bounce 1.8s ease-in-out infinite;
+}
+
+@keyframes packs-complementos-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(3px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #packs .packs-complementos-cta-icon {
+    animation: none;
+  }
+
+  #packs .packs-complementos-cta:hover,
+  #packs .packs-complementos-cta:focus-visible {
+    transform: none;
+  }
+}
+
+#complementos.complementos-section {
+  scroll-margin-top: 0.75rem;
+  background-color: #fff;
+}
+
+#complementos .complementos-titulo {
+  color: var(--vin-profundo, #3a0f18);
+}
+
+.packs-titulo {
   padding-bottom: 1.35rem;
 }
 
-#packs .packs-titulo::before {
+.packs-titulo::before {
   content: '';
   position: absolute;
   z-index: 0;
@@ -507,7 +685,7 @@ onUnmounted(() => {
   pointer-events: none;
 }
 
-#packs .packs-titulo::after {
+.packs-titulo::after {
   content: '♥';
   position: absolute;
   z-index: 1;
@@ -534,11 +712,11 @@ onUnmounted(() => {
     animation: homeTituloVinaHojas 5s ease-in-out infinite;
   }
 
-  #packs .packs-titulo::before {
+  .packs-titulo::before {
     animation: packsTituloLinea 4.5s ease-in-out infinite;
   }
 
-  #packs .packs-titulo::after {
+  .packs-titulo::after {
     animation: packsTituloCorazon 4.5s ease-in-out infinite;
   }
 }
@@ -597,8 +775,8 @@ onUnmounted(() => {
     animation: none !important;
   }
 
-  #packs .packs-titulo::before,
-  #packs .packs-titulo::after {
+  .packs-titulo::before,
+  .packs-titulo::after {
     animation: none !important;
   }
 }
@@ -623,10 +801,18 @@ onUnmounted(() => {
   max-width: 100%;
 }
 
+#sobre-mi .sobre-mi-dedicatoria-wrap {
+  width: 100%;
+  min-width: 0;
+}
+
 #sobre-mi .sobre-mi-dedicatoria {
   margin: 0;
+  width: 100%;
+  max-width: 100%;
   text-align: center;
   font-family: 'Nunito', system-ui, sans-serif;
+  font-size: var(--sobre-mi-dedicatoria-fs, 0.85rem);
   font-weight: 600;
   line-height: 1.3;
   color: var(--vin-profundo);
@@ -666,11 +852,7 @@ onUnmounted(() => {
 
   #sobre-mi .sobre-mi-cluster {
     gap: 0.45rem;
-  }
-
-  #sobre-mi .sobre-mi-dedicatoria {
-    width: min(100%, 22rem);
-    font-size: clamp(0.5rem, 3.1vw, 0.78rem);
+    width: 100%;
   }
 
   #sobre-mi .sobre-mi-hero-img {
@@ -688,11 +870,6 @@ onUnmounted(() => {
 }
 
 @media (max-width: 359.98px) {
-  #sobre-mi .sobre-mi-dedicatoria {
-    font-size: 0.48rem;
-    max-width: 20rem;
-  }
-
   #sobre-mi .sobre-mi-hero-img {
     width: clamp(84px, 27vw, 120px);
   }
@@ -739,14 +916,6 @@ onUnmounted(() => {
     padding-inline: clamp(1.5rem, 3vw, 2.5rem);
   }
 
-  #sobre-mi .sobre-mi-dedicatoria {
-    width: 100%;
-    max-width: 100%;
-    margin: 0;
-    font-size: clamp(0.74rem, 1vw, 1rem);
-    text-align: center;
-  }
-
   #sobre-mi .sobre-mi-logo {
     flex: 0 0 auto;
     flex-shrink: 0;
@@ -765,19 +934,9 @@ onUnmounted(() => {
     padding-inline: 1.75rem;
   }
 
-  #sobre-mi .sobre-mi-dedicatoria {
-    font-size: clamp(0.66rem, 1.85vw, 0.76rem);
-  }
-
   #sobre-mi .sobre-mi-logo {
     width: clamp(60px, 6.5vw, 80px);
     height: clamp(60px, 6.5vw, 80px);
-  }
-}
-
-@media (min-width: 1024px) {
-  #sobre-mi .sobre-mi-dedicatoria {
-    font-size: 1.25rem;
   }
 }
 
