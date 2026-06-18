@@ -29,7 +29,7 @@ async function writeOptimized(srcName, destName) {
 async function main() {
   const files = fs.readdirSync(imgDir)
   /** No usar los JPG ya generados como entrada (evita input === output). */
-  const skip = new Set(['innovacion.jpg', 'coleccion-algorta.jpg', 'pack-rockstars.jpg', 'imagen-papa.jpg'])
+  const skip = new Set(['innovacion.jpg', 'coleccion-algorta.jpg', 'pack-rockstars.jpg', 'portada.jpg'])
   const innov = files.find((f) => !skip.has(f) && /^Innov.*\.jpe?g$/i.test(f))
   const col = files.find(
     (f) =>
@@ -44,9 +44,6 @@ async function main() {
   if (col) await writeOptimized(col, 'coleccion-algorta.jpg')
   /* En Windows no escribir "rockstars.jpg" si existe "rockStars.jpg" (mismo path). */
   if (rock) await writeOptimized(rock, 'pack-rockstars.jpg')
-
-  const papa = files.find((f) => !skip.has(f) && /^imagen_pap/i.test(f))
-  if (papa) await writeOptimized(papa, 'imagen-papa.jpg')
 }
 
 main().catch((e) => {

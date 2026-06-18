@@ -48,7 +48,7 @@ function getShareBaseOrigin() {
 
 const OG_PAGE_SUFFIX = '.html'
 
-/** Vista previa del catálogo completo (og:image = imagen_papá, ruta ASCII para WhatsApp). */
+/** Vista previa del catálogo completo (og:image = portada.jpg, ruta ASCII para WhatsApp). */
 const CATALOG_OG_PAGE = 'og-catalogo.html'
 
 /**
@@ -113,42 +113,16 @@ function resolvePackImageUrlForWhatsApp(assetPath) {
   return `${base}${path}`
 }
 
-/** Precio sin símbolo $ (en WhatsApp el $ puede truncar el resto del mensaje prefijado). */
+/** Precio tal como en catálogo (conserva $ si viene en el JSON). */
 function priceForWhatsAppMessage(price) {
   if (!price || typeof price !== 'string') return ''
-  return price.trim().replace(/\$/g, '').replace(/\s+/g, ' ').trim()
+  const normalized = price.trim().replace(/\s+/g, ' ')
+  if (!normalized) return ''
+  return normalized.startsWith('$') ? normalized : `$${normalized}`
 }
 
 /**
- * URL absoluta HTTPS de un asset en `public/` (p. ej. `/img/pack.jpg`).
- * En el navegador usa `location.origin`; sin `window` usa env.
- */
-export function resolvePublicAssetUrl(assetPath) {
-  if (!assetPath || typeof assetPath !== 'string') return ''
-  const trimmed = assetPath.trim()
-  if (!trimmed) return ''
-  if (/^https?:\/\//i.test(trimmed)) return normalizeHttpsRoot(trimmed)
-
-  const path = trimmed.startsWith('/') ? trimmed : `/${trimmed}`
-
-  if (typeof window !== 'undefined' && window.location?.origin) {
-    return `${window.location.origin}${path}`
-  }
-
-  const site = normalizeHttpsRoot(PUBLIC_SITE_FROM_ENV)
-  if (site) return `${site}${path}`
-
-  return path
-}
-
-export function getWhatsAppUrl() {
-  const digits = digitsOnly()
-  if (!digits) return '#'
-  return `https://wa.me/${digits}`
-}
-
-/**
- * URL de la página OG del catálogo (vista previa con imagen_papá en WhatsApp).
+ * URL de la página OG del catálogo (vista previa con portada.jpg en WhatsApp).
  */
 function resolveCatalogPreviewUrlForWhatsApp() {
   const base = getShareBaseOrigin()

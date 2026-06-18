@@ -54,3 +54,39 @@ for (const pack of packs) {
   fs.writeFileSync(path.join(outDir, `og-${page}`), html, 'utf8')
   console.log(`wrote og-${page} -> ${pack.title}`)
 }
+
+const catalogPageUrl = `${base}/og-catalogo.html`
+const catalogImgUrl = `${base}/img/portada.jpg`
+const catalogHtml = `<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Especial Día del Padre · Vinóloga</title>
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Vinóloga">
+  <meta property="og:locale" content="es_CL">
+  <meta property="og:title" content="Especial Día del Padre · Vinóloga">
+  <meta property="og:description" content="Elige tu vino o pack para regalar y haz tu pedido por whatsapp.">
+  <meta name="description" content="Elige tu vino o pack para regalar y haz tu pedido por whatsapp.">
+  <meta name="twitter:description" content="Elige tu vino o pack para regalar y haz tu pedido por whatsapp.">
+  <meta property="og:url" content="${catalogPageUrl}">
+  <meta property="og:image" content="${catalogImgUrl}">
+  <meta property="og:image:secure_url" content="${catalogImgUrl}">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:alt" content="Especial Día del Padre · Vinóloga">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Especial Día del Padre · Vinóloga">
+  <meta name="twitter:image" content="${catalogImgUrl}">
+  <link rel="canonical" href="${catalogPageUrl}">
+</head>
+<body style="margin:0;font-family:system-ui,sans-serif;background:#1a1a1a;color:#eee;text-align:center;padding:1rem;">
+  <p style="margin:0 0 1rem;font-size:1rem;">Vinóloga — Especial Día del Padre</p>
+  <img src="${catalogImgUrl}" alt="Especial Día del Padre" width="560" style="max-width:100%;height:auto;border-radius:12px;display:block;margin:0 auto 1rem;">
+  <p style="margin:0;"><a href="${base}/#packs" style="color:#5cb85c;">Ver catálogo completo</a></p>
+</body>
+</html>
+`
+
+fs.writeFileSync(path.join(outDir, 'og-catalogo.html'), catalogHtml, 'utf8')
+console.log('wrote og-catalogo.html -> portada.jpg')

@@ -15,8 +15,14 @@
           >
         </div>
         <div class="card-img-caption">
-          <h6 class="card-title fw-bold mb-0">{{ title }}</h6>
-          <p class="card-valle mb-0">{{ valle }}</p>
+          <div class="card-img-caption-head">
+            <div class="card-title-wrap">
+              <h6 class="card-title fw-bold mb-0">{{ title }}</h6>
+            </div>
+            <div class="card-valle-wrap">
+              <p class="card-valle mb-0">{{ valle }}</p>
+            </div>
+          </div>
           <div class="card-img-caption-actions">
             <div class="card-prices">
               <template v-if="priceOferta && !agotado">
@@ -160,10 +166,6 @@
       type: String,
       required: true,
     },
-    ofertaEtiqueta: {
-      type: String,
-      default: '',
-    },
     priceOferta: {
       type: String,
       default: '',
@@ -280,10 +282,35 @@
   .card-img-caption {
     flex: 0 0 auto;
     z-index: 1;
+    display: flex;
+    flex-direction: column;
     padding: 0.55rem clamp(0.65rem, 3vw, 0.9rem) 0.6rem;
     text-align: center;
     background: linear-gradient(180deg, #2a1014 0%, #14080a 100%);
     border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .card-img-caption-head {
+    flex: 0 0 auto;
+  }
+
+  .card-title-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(3 * 1.2em);
+    font-size: clamp(0.82rem, 2.45vw, 1.05rem);
+    line-height: 1.2;
+  }
+
+  .card-valle-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(1 * 1.3em);
+    margin-top: 0.2rem;
+    font-size: clamp(0.62rem, 1.65vw, 0.78rem);
+    line-height: 1.3;
   }
 
   .card-img-caption-actions {
@@ -292,6 +319,8 @@
     align-items: center;
     justify-content: space-between;
     gap: 0.5rem;
+    flex-shrink: 0;
+    min-height: clamp(2.65rem, 7.5vw, 3.1rem);
     margin-top: 0.4rem;
     padding: 0.4rem 0.1rem 0.05rem;
     border-top: 1px solid rgba(255, 255, 255, 0.18);
@@ -300,21 +329,29 @@
   .card-img-caption .card-title {
     font-family: 'Nunito', system-ui, sans-serif;
     color: #fff;
-    font-size: clamp(0.82rem, 2.45vw, 1.05rem);
+    font-size: 1em;
     line-height: 1.2;
     font-weight: 800;
     overflow-wrap: break-word;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
     text-shadow: 0 1px 4px rgba(0, 0, 0, 0.45);
   }
 
   .card-img-caption .card-valle {
-    margin-top: 0.2rem;
-    font-size: clamp(0.62rem, 1.65vw, 0.78rem);
+    margin-top: 0;
+    font-size: 1em;
     line-height: 1.3;
     letter-spacing: 0.03em;
     font-weight: 700;
     color: #f4c9cf;
     overflow-wrap: break-word;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
   }
 
@@ -365,8 +402,16 @@
   .card-prices {
     flex: 1 1 auto;
     min-width: 0;
+    min-height: calc(2 * 1.15em);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     text-align: left;
     line-height: 1.15;
+  }
+
+  .card-img-caption .wa-cta {
+    flex-shrink: 0;
   }
 
   .card-img-caption .card-price--regular {
@@ -375,12 +420,14 @@
     font-size: clamp(0.68rem, 1.7vw, 0.8rem);
     font-weight: 600;
     margin-bottom: 0.05rem;
+    white-space: nowrap;
   }
 
   .card-img-caption .card-price--oferta {
     color: #9ef0b8;
     font-size: clamp(0.82rem, 2vw, 0.98rem);
     line-height: 1.15;
+    white-space: nowrap;
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
   }
 
@@ -388,6 +435,7 @@
     color: #9ef0b8;
     font-size: clamp(0.82rem, 2vw, 0.98rem);
     text-align: left;
+    white-space: nowrap;
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
   }
 

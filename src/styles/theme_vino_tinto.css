@@ -1,29 +1,18 @@
-/*Paleta vino: fondos muy pálidos + acento legible (sustituye el rol del verde #198754) */
-:root,
-[data-bs-theme="light"] {
+/* Paleta vino: fondos muy pálidos + acento legible (sustituye el rol del verde #198754) */
+:root {
   --vin-palido: #f0e4e7;
-  --vin-fondo-seccion: #f6f0f2;
   --vin-acento: #6d2c35;
   --vin-acento-rgb: 109, 44, 53;
   --vin-acento-hover: #54252b;
   --vin-acento-active: #451e22;
 
   --vin-profundo: #3a0f18;
-  --vin-profundo-rgb: 58, 15, 24;
 
-  /* Look oscuro: negro neutro (menos carga “vino” en el pixel) + superficies */
   --vin-negro-marca: #0a0a0a;
-  --vin-superficie-oscura: #121112;
-  --vin-superficie-alterna: #181618;
-  /* Burdeos packs: un poco más bajo en saturación / más legible con texto claro */
-  --vin-fondo-packs: #24161c;
   --vin-texto-claro: rgba(255, 255, 255, 0.96);
   --vin-texto-muted: rgba(255, 255, 255, 0.8);
-  /* Acento aclarado para texto sobre negro (p. ej. “Sobre mí”) */
-  --vin-acento-sobre-negro: #e4b3bc;
   --vin-borde-sutil: rgba(255, 255, 255, 0.1);
 
-  /* Verde marca WhatsApp (solo botón WA) */
   --wa-green: #25d366;
   --wa-green-hover: #20bd5a;
   --wa-green-active: #1da851;
@@ -34,14 +23,6 @@
   --bs-success-text-emphasis: #3d1a1f;
   --bs-success-bg-subtle: var(--vin-palido);
   --bs-success-border-subtle: #d4bfc4;
-}
-
-.bg-vino-palido {
-  background-color: var(--vin-palido) !important;
-}
-
-.bg-vino-profundo {
-  background-color: var(--vin-profundo) !important;
 }
 
 .bg-vin-negro {
@@ -143,38 +124,4 @@
   .wa-cta:not(.pe-none):not([aria-disabled='true']):focus-visible {
     transform: none;
   }
-}
-
-.btn-success {
-  --bs-btn-color: #fff;
-  --bs-btn-bg: var(--vin-acento);
-  --bs-btn-border-color: var(--vin-acento);
-  --bs-btn-hover-color: #fff;
-  --bs-btn-hover-bg: var(--vin-acento-hover);
-  --bs-btn-hover-border-color: #4a2229;
-  --bs-btn-focus-shadow-rgb: var(--vin-acento-rgb);
-  --bs-btn-active-color: #fff;
-  --bs-btn-active-bg: var(--vin-acento-active);
-  --bs-btn-active-border-color: #3d1c22;
-  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-  --bs-btn-disabled-color: #fff;
-  --bs-btn-disabled-bg: var(--vin-acento);
-  --bs-btn-disabled-border-color: var(--vin-acento);
-}
-
-.btn-outline-success {
-  --bs-btn-color: var(--vin-acento);
-  --bs-btn-border-color: var(--vin-acento);
-  --bs-btn-hover-color: #fff;
-  --bs-btn-hover-bg: var(--vin-acento);
-  --bs-btn-hover-border-color: var(--vin-acento);
-  --bs-btn-focus-shadow-rgb: var(--vin-acento-rgb);
-  --bs-btn-active-color: #fff;
-  --bs-btn-active-bg: var(--vin-acento-hover);
-  --bs-btn-active-border-color: #4a2229;
-  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-  --bs-btn-disabled-color: var(--vin-acento);
-  --bs-btn-disabled-bg: transparent;
-  --bs-btn-disabled-border-color: var(--vin-acento);
-  --bs-gradient: none;
 }

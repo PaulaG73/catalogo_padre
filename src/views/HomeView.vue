@@ -4,7 +4,7 @@
   <section id="sobre-mi" class="home-section sobre-mi-section--light py-1 py-md-2">
     <div class="container sobre-mi">
       <div class="sobre-mi-media">
-        <div class="sobre-mi-cluster">
+        <div ref="sobreMiClusterRef" class="sobre-mi-cluster">
         <img
           class="sobre-mi-hero-img"
           src="/img/imagen_pap%C3%A1.jpg"
@@ -34,7 +34,7 @@
       </div>
     </div>
   </section>
-  <section id="packs" class="home-section home-section--slate pt-4 pt-md-5 pb-2 pb-md-3">
+  <section id="packs" class="home-section pt-4 pt-md-5 pb-2 pb-md-3">
     <div class="container text-center packs-encabezado">
       <h3 class="packs-titulo mb-1 fw-bold">Cada uno tiene su estilo</h3>
       <p class="packs-subtitulo mb-3">
@@ -70,7 +70,7 @@
     >
       <button
         type="button"
-        class="packs-carousel-arrow packs-carousel-arrow--prev"
+        class="packs-carousel-arrow"
         aria-label="Ver packs anteriores"
         @click="scrollCarousel(-1)"
       >
@@ -99,7 +99,6 @@
                 :bloques="proyecto.bloques"
                 :image="proyecto.image"
                 :price="proyecto.price"
-                :oferta-etiqueta="proyecto.ofertaEtiqueta || ''"
                 :price-oferta="proyecto.priceOferta || ''"
                 :agotado="Boolean(proyecto.agotado)"
               />
@@ -111,7 +110,7 @@
         <div class="packs-carousel-rail-mid d-flex align-items-center justify-content-center">
           <button
             type="button"
-            class="packs-carousel-arrow packs-carousel-arrow--next"
+            class="packs-carousel-arrow"
             aria-label="Ver packs siguientes"
             @click="scrollCarousel(1)"
           >
@@ -136,7 +135,7 @@
 
   <section
     id="complementos"
-    class="home-section home-section--light complementos-section py-3 py-md-4 pb-2 pb-md-3"
+    class="home-section complementos-section py-3 py-md-4 pb-2 pb-md-3"
     aria-labelledby="complementos-titulo"
   >
     <div class="container text-center mb-3 mb-md-4">
@@ -145,7 +144,7 @@
     <div class="packs-carousel-outer d-flex align-items-center gap-2 gap-sm-3 px-2 px-sm-3">
       <button
         type="button"
-        class="packs-carousel-arrow packs-carousel-arrow--prev"
+        class="packs-carousel-arrow"
         aria-label="Ver regalos anteriores"
         @click="scrollRegalosCarousel(-1)"
       >
@@ -181,7 +180,7 @@
       </div>
       <button
         type="button"
-        class="packs-carousel-arrow packs-carousel-arrow--next"
+        class="packs-carousel-arrow"
         aria-label="Ver regalos siguientes"
         @click="scrollRegalosCarousel(1)"
       >
@@ -261,6 +260,7 @@ const regalosLoop = computed(() => [...regalosOrdenados.value, ...regalosOrdenad
 
 const carouselRef = ref(null)
 const regalosCarouselRef = ref(null)
+const sobreMiClusterRef = ref(null)
 const sobreMiDedicatoriaWrapRef = ref(null)
 const sobreMiDedicatoriaRef = ref(null)
 const carouselPaused = ref(false)
@@ -271,6 +271,8 @@ const SCROLL_STEP = 0.32
 
 /** Ancho del hueco del carrusel (sustituye cqi sin container-type, evita avisos del validador CSS) */
 const PACKS_CAROUSEL_IW = '--packs-carousel-iw'
+const REGALOS_SLIDES_PER_VIEW = '--regalos-slides-per-view'
+const REGALO_CARD_MAX_PX = 11.25 * 16
 
 let rafId = 0
 let syncCarouselRaf = null
@@ -286,6 +288,7 @@ let sobreMiResizeObserver = null
 const SOBRE_MI_DEDICATORIA_FS = '--sobre-mi-dedicatoria-fs'
 const SOBRE_MI_DEDICATORIA_MIN_PX = 8
 const SOBRE_MI_DEDICATORIA_MAX_PX = 40
+const SOBRE_MI_DEDICATORIA_FIT_SLACK_PX = 2
 
 function dedicatoriaLineas() {
   const dedicatoria = sobreMiDedicatoriaRef.value
@@ -294,12 +297,50 @@ function dedicatoriaLineas() {
 }
 
 function dedicatoriaCabeEnAncho(maxWidth) {
+  const dedicatoria = sobreMiDedicatoriaRef.value
   const lines = dedicatoriaLineas()
-  if (!lines.length) return false
+  if (!dedicatoria || !lines.length) return false
   for (const line of lines) {
     if (line.scrollWidth > maxWidth + 0.5) return false
   }
+  if (dedicatoria.scrollWidth > maxWidth + 0.5) return false
   return true
+}
+
+function getSobreMiDedicatoriaMaxWidth() {
+  const cluster = sobreMiClusterRef.value
+  const wrap = sobreMiDedicatoriaWrapRef.value
+  const dedicatoria = sobreMiDedicatoriaRef.value
+  if (!wrap || !dedicatoria) return 0
+
+  const wrapStyles = getComputedStyle(wrap)
+  let maxWidth =
+    dedicatoria.clientWidth ||
+    wrap.clientWidth -
+      parseFloat(wrapStyles.paddingLeft) -
+      parseFloat(wrapStyles.paddingRight)
+
+  if (maxWidth <= 0) return 0
+
+  if (cluster) {
+    const hero = cluster.querySelector('.sobre-mi-hero-img')
+    const logo = cluster.querySelector('.sobre-mi-logo')
+    const clusterStyle = getComputedStyle(cluster)
+    const isHorizontal =
+      clusterStyle.display === 'grid' || clusterStyle.flexDirection === 'row'
+
+    if (isHorizontal && hero && logo) {
+      const wrapRect = wrap.getBoundingClientRect()
+      const heroRect = hero.getBoundingClientRect()
+      const logoRect = logo.getBoundingClientRect()
+      const leftBound = Math.max(wrapRect.left, heroRect.right)
+      const rightBound = Math.min(wrapRect.right, logoRect.left)
+      const gapWidth = Math.max(0, rightBound - leftBound)
+      maxWidth = Math.min(maxWidth, gapWidth)
+    }
+  }
+
+  return Math.max(0, maxWidth - SOBRE_MI_DEDICATORIA_FIT_SLACK_PX)
 }
 
 function fitSobreMiDedicatoria() {
@@ -307,7 +348,7 @@ function fitSobreMiDedicatoria() {
   const dedicatoria = sobreMiDedicatoriaRef.value
   if (!wrap || !dedicatoria) return
 
-  const maxWidth = wrap.clientWidth
+  const maxWidth = getSobreMiDedicatoriaMaxWidth()
   if (maxWidth <= 0) return
 
   let lo = SOBRE_MI_DEDICATORIA_MIN_PX
@@ -347,7 +388,29 @@ function syncRegalosCarouselInlineSize() {
   const el = regalosCarouselRef.value
   if (!el) return
   const w = el.clientWidth
-  if (w > 0) el.style.setProperty(PACKS_CAROUSEL_IW, `${w}px`)
+  if (w <= 0) return
+  el.style.setProperty(PACKS_CAROUSEL_IW, `${w}px`)
+
+  const inner = el.querySelector('.packs-carousel-inner')
+  const gapPx = inner
+    ? parseFloat(getComputedStyle(inner).columnGap || getComputedStyle(inner).gap) || 0
+    : 0
+
+  const isDesktop = window.matchMedia('(min-width: 768px)').matches
+  let perView = 3
+  if (!isDesktop) {
+    const twoFit = w >= 2 * REGALO_CARD_MAX_PX + gapPx
+    perView = twoFit ? 2 : 1
+  }
+  el.style.setProperty(REGALOS_SLIDES_PER_VIEW, String(perView))
+}
+
+function getRegalosSlidesPerView() {
+  const el = regalosCarouselRef.value
+  if (!el) return 1
+  if (window.matchMedia('(min-width: 768px)').matches) return 3
+  const raw = getComputedStyle(el).getPropertyValue(REGALOS_SLIDES_PER_VIEW).trim()
+  return parseInt(raw, 10) === 2 ? 2 : 1
 }
 
 /**
@@ -495,7 +558,7 @@ function scrollRegalosCarousel(direction) {
   if (!regaloCount || !Number.isInteger(regaloCount)) return
 
   const threeCols = window.matchMedia('(min-width: 768px)').matches
-  const step = threeCols ? 3 : 1
+  const step = threeCols ? 3 : getRegalosSlidesPerView()
   const currentIdx = nearestCarouselSlideIndex(slides, el.scrollLeft)
   const snappedLeft = slides[currentIdx].offsetLeft
 
@@ -552,9 +615,10 @@ onMounted(async () => {
   }
   await nextTick()
   scheduleSyncRegalosCarouselInlineSize()
-  if (typeof ResizeObserver !== 'undefined' && sobreMiDedicatoriaWrapRef.value) {
+  if (typeof ResizeObserver !== 'undefined') {
     sobreMiResizeObserver = new ResizeObserver(() => scheduleFitSobreMiDedicatoria())
-    sobreMiResizeObserver.observe(sobreMiDedicatoriaWrapRef.value)
+    if (sobreMiClusterRef.value) sobreMiResizeObserver.observe(sobreMiClusterRef.value)
+    if (sobreMiDedicatoriaWrapRef.value) sobreMiResizeObserver.observe(sobreMiDedicatoriaWrapRef.value)
   }
   const runFitSobreMi = () => scheduleFitSobreMiDedicatoria()
   if (document.fonts?.ready) {
@@ -597,21 +661,6 @@ onUnmounted(() => {
   background-color: var(--vin-negro-marca);
 }
 
-.home-section--ink {
-  background-color: var(--vin-negro-marca);
-}
-
-.home-section--slate {
-  background-color: var(--vin-negro-marca);
-}
-
-.home-divider {
-  max-width: min(100%, 960px);
-  margin-left: auto;
-  margin-right: auto;
-  opacity: 0.35;
-}
-
 .prefooter-pitch {
   display: flex;
   flex-wrap: wrap;
@@ -624,21 +673,10 @@ onUnmounted(() => {
   margin-bottom: 0.35rem;
 }
 
-.prefooter-pitch--light {
-  width: 100%;
-  background-color: #fff;
-  border-top: 1px solid rgba(58, 15, 24, 0.1);
-  border-bottom: 1px solid rgba(58, 15, 24, 0.1);
-}
-
 .prefooter-pitch--dark {
   width: 100%;
   background-color: var(--vin-negro-marca, #0a0a0a);
   border-top: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.prefooter-pitch--light .prefooter-line {
-  color: #000;
 }
 
 .prefooter-pitch--dark .prefooter-line {
@@ -685,54 +723,6 @@ onUnmounted(() => {
   margin-bottom: 0.4rem;
   z-index: 0;
   color: var(--vin-texto-claro);
-}
-
-/*
- * Línea tipo viña bajo el título (CSS):
- * ::before = tallo en curva (cuarto de elipse con bordes).
- * ::after  = “hojas” (elipses + box-shadow) y un puntito tipo uva.
- */
-.home-section h3:not(.packs-titulo)::before {
-  content: '';
-  position: absolute;
-  z-index: -1;
-  left: 50%;
-  bottom: 0.18rem;
-  width: clamp(2.35rem, 14vw, 3.15rem);
-  height: clamp(1.1rem, 5.5vw, 1.45rem);
-  transform: translateX(calc(-50% - 0.12rem)) rotate(-13deg);
-  transform-origin: 0 100%;
-  border: none;
-  border-bottom: 2.5px solid rgba(var(--vin-acento-rgb), 0.88);
-  border-left: 2.5px solid rgba(var(--vin-acento-rgb), 0.88);
-  border-radius: 0 0 0 100%;
-  background: transparent;
-  opacity: 0.9;
-  pointer-events: none;
-}
-
-/* Guiño al arco del logo: franja breve, sin verdes de “viña” */
-.home-section h3:not(.packs-titulo)::after {
-  content: '';
-  position: absolute;
-  z-index: 0;
-  left: 50%;
-  bottom: 0.12rem;
-  width: clamp(2.5rem, 18vw, 3.75rem);
-  height: 3px;
-  transform: translateX(-50%);
-  border-radius: 2px;
-  pointer-events: none;
-  background: linear-gradient(
-    90deg,
-    #c9a227 0%,
-    #3ddc84 22%,
-    #4dabf7 44%,
-    #9775fa 66%,
-    #f783ac 88%,
-    var(--vin-acento) 100%
-  );
-  opacity: 0.88;
 }
 
 /* Línea burdeos + corazón bajo el título del carrusel (Día del Padre) */
@@ -871,7 +861,12 @@ onUnmounted(() => {
 }
 
 #complementos .packs-carousel-slide--regalo {
-  width: min(11.25rem, calc(var(--packs-carousel-iw, 100%) - 0.35rem));
+  width: calc(
+    (
+        var(--packs-carousel-iw, 100%) -
+        (var(--regalos-slides-per-view, 1) - 1) * var(--packs-gap)
+      ) / var(--regalos-slides-per-view, 1)
+  );
   scroll-snap-align: start;
   scroll-snap-stop: always;
   overflow: visible;
@@ -936,14 +931,6 @@ onUnmounted(() => {
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .home-section h3:not(.packs-titulo)::before {
-    animation: homeTituloVinaTallo 5s ease-in-out infinite;
-  }
-
-  .home-section h3:not(.packs-titulo)::after {
-    animation: homeTituloVinaHojas 5s ease-in-out infinite;
-  }
-
   .packs-titulo::before {
     animation: packsTituloLinea 4.5s ease-in-out infinite;
   }
@@ -979,34 +966,7 @@ onUnmounted(() => {
   }
 }
 
-@keyframes homeTituloVinaTallo {
-  0%,
-  100% {
-    transform: translateX(calc(-50% - 0.12rem)) rotate(-13deg);
-  }
-  50% {
-    transform: translateX(calc(-50% - 0.06rem)) rotate(-10deg);
-  }
-}
-
-@keyframes homeTituloVinaHojas {
-  0%,
-  100% {
-    transform: translateX(-50%) scaleX(1);
-    opacity: 0.88;
-  }
-  50% {
-    transform: translateX(-50%) scaleX(1.06);
-    opacity: 1;
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .home-section h3::before,
-  .home-section h3::after {
-    animation: none !important;
-  }
-
   .packs-titulo::before,
   .packs-titulo::after {
     animation: none !important;
@@ -1031,28 +991,36 @@ onUnmounted(() => {
   gap: clamp(0.55rem, 2vw, 1.25rem);
   text-align: center;
   max-width: 100%;
+  overflow-x: clip;
 }
 
 #sobre-mi .sobre-mi-dedicatoria-wrap {
   width: 100%;
   min-width: 0;
+  max-width: 100%;
+  overflow-x: clip;
 }
 
 #sobre-mi .sobre-mi-dedicatoria {
   margin: 0;
   width: 100%;
   max-width: 100%;
+  min-width: 0;
   text-align: center;
   font-family: 'Nunito', system-ui, sans-serif;
   font-size: var(--sobre-mi-dedicatoria-fs, 0.85rem);
   font-weight: 600;
   line-height: 1.3;
   color: var(--vin-profundo);
+  overflow-x: clip;
 }
 
 #sobre-mi .sobre-mi-dedicatoria-line {
   display: block;
   white-space: nowrap;
+  max-width: 100%;
+  overflow-x: clip;
+  text-overflow: clip;
 }
 
 #sobre-mi .sobre-mi-dedicatoria--destacado {
@@ -1066,6 +1034,9 @@ onUnmounted(() => {
   max-width: 100%;
   height: auto;
   object-fit: contain;
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
 }
 
 #sobre-mi .sobre-mi-logo {
@@ -1074,6 +1045,9 @@ onUnmounted(() => {
   object-position: center;
   border-radius: 50%;
   box-shadow: 0 0 0 2px rgba(109, 44, 53, 0.15);
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
 }
 
 @media (max-width: 767.98px) {
@@ -1123,34 +1097,40 @@ onUnmounted(() => {
   }
 
   #sobre-mi .sobre-mi-cluster {
-    display: flex;
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-rows: auto;
     align-items: center;
-    justify-content: space-between;
+    justify-items: center;
     width: 100%;
     max-width: none;
-    gap: 0;
+    column-gap: clamp(0.65rem, 2vw, 1.75rem);
+    row-gap: 0;
   }
 
   #sobre-mi .sobre-mi-hero-img {
-    flex: 0 0 auto;
-    flex-shrink: 0;
+    grid-column: 1;
+    grid-row: 1;
     width: clamp(96px, 10vw, 168px);
     margin: 0;
   }
 
   #sobre-mi .sobre-mi-dedicatoria-wrap {
-    flex: 1 1 0;
+    grid-column: 2;
+    grid-row: 1;
+    width: 100%;
     min-width: 0;
+    max-width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding-inline: clamp(1.5rem, 3vw, 2.5rem);
+    padding-inline: clamp(0.35rem, 1.5vw, 1.25rem);
+    z-index: 0;
   }
 
   #sobre-mi .sobre-mi-logo {
-    flex: 0 0 auto;
-    flex-shrink: 0;
+    grid-column: 3;
+    grid-row: 1;
     width: clamp(64px, 7vw, 112px);
     height: clamp(64px, 7vw, 112px);
     margin: 0;
@@ -1163,35 +1143,12 @@ onUnmounted(() => {
   }
 
   #sobre-mi .sobre-mi-dedicatoria-wrap {
-    padding-inline: 1.75rem;
+    padding-inline: clamp(0.5rem, 1.5vw, 1rem);
   }
 
   #sobre-mi .sobre-mi-logo {
     width: clamp(60px, 6.5vw, 80px);
     height: clamp(60px, 6.5vw, 80px);
-  }
-}
-
-.highlight {
-  color: var(--vin-acento);
-  font-style: italic;
-  font-weight: bold;
-}
-
-.frase-final {
-  font-style: italic;
-  animation: colorPulse 3s ease-in-out infinite;
-}
-
-@keyframes colorPulse {
-  0% {
-    color: var(--vin-texto-muted);
-  }
-  50% {
-    color: var(--vin-acento);
-  }
-  100% {
-    color: var(--vin-texto-muted);
   }
 }
 
