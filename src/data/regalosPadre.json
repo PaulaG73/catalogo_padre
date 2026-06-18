@@ -1,0 +1,65 @@
+[
+  {
+    "id": "1",
+    "title": "Ajedrez",
+    "image": "/img/ajedrez.jpg",
+    "price": "$19.990",
+    "agotado": false
+  },
+  {
+    "id": "2",
+    "title": "Beer socks",
+    "image": "/img/beer_socks.jpg",
+    "price": "$9.990",
+    "agotado": false
+  },
+  {
+    "id": "3",
+    "title": "Billetera con grabado Papá",
+    "image": "/img/billetera.jpg",
+    "price": "$8.990",
+    "agotado": false
+  },
+  {
+    "id": "4",
+    "title": "Juego 5 Cachos",
+    "image": "/img/cachos.jpg",
+    "price": "$29.990",
+    "agotado": false
+  },
+  {
+    "id": "5",
+    "title": "Decantador Tradicional Ecuvée 1,9 litros",   
+    "image": "/img/decantador.jpg",
+    "price": "$19.990",
+    "agotado": false
+  },
+  {
+    "id": "6",
+    "title": "Dominó",
+    "image": "/img/domin%C3%B3.jpg",
+    "price": "$24.990",
+    "agotado": false
+  },
+  {
+    "id": "7",
+    "title": "Set 4 Moscow Mules",
+    "image": "/img/set_moscow_mules.jpg",
+    "price": "$29.990",
+    "agotado": false
+  },
+  {
+    "id": "8",
+    "title": "Set 6 Vasos Piscoleros Green Glass",
+    "image": "/img/vasos_piscoleros.jpg",
+    "price": "$29.990",
+    "agotado": false
+  },
+  {
+    "id": "9",
+    "title": "Moscow Mule",
+    "image": "/img/moscow_mule.jpg",
+    "price": "$9.990",
+    "agotado": false
+  }
+]

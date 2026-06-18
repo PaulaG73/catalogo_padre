@@ -38,14 +38,14 @@
     <div class="container text-center packs-encabezado">
       <h3 class="packs-titulo mb-1 fw-bold">Cada uno tiene su estilo</h3>
       <p class="packs-subtitulo mb-3">
-        Elige el regalo para quien quieras homenajear — una botella o un pack, y puedes agregar un complemento...
+        Elige el regalo para quien quieras homenajear — una botella, un pack y/o algún detalle a su medida
       </p>
       <a
         href="#complementos"
         class="packs-complementos-cta"
-        aria-label="Desplazarse a la sección de complementos"
+        aria-label="Desplazarse a la sección de otros regalos"
       >
-        <span class="packs-complementos-cta-text">Revisar complementos</span>
+        <span class="packs-complementos-cta-text">Revisa otros regalos</span>
         <svg
           class="packs-complementos-cta-icon"
           xmlns="http://www.w3.org/2000/svg"
@@ -136,11 +136,59 @@
 
   <section
     id="complementos"
-    class="home-section home-section--light complementos-section py-3 py-md-4"
+    class="home-section home-section--light complementos-section py-3 py-md-4 pb-2 pb-md-3"
     aria-labelledby="complementos-titulo"
   >
-    <div class="container text-center">
-      <h3 id="complementos-titulo" class="packs-titulo complementos-titulo fw-bold mb-1">Complementos para tu regalo</h3>
+    <div class="container text-center mb-3 mb-md-4">
+      <h3 id="complementos-titulo" class="packs-titulo complementos-titulo fw-bold mb-1">Otros regalos</h3>
+    </div>
+    <div class="packs-carousel-outer d-flex align-items-center gap-2 gap-sm-3 px-2 px-sm-3">
+      <button
+        type="button"
+        class="packs-carousel-arrow packs-carousel-arrow--prev"
+        aria-label="Ver regalos anteriores"
+        @click="scrollRegalosCarousel(-1)"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+          <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+        </svg>
+      </button>
+      <div class="packs-carousel-slot flex-grow-1 min-w-0">
+        <div
+          ref="regalosCarouselRef"
+          class="packs-carousel-wrap"
+          tabindex="0"
+          role="region"
+          aria-label="Carrusel de otros regalos, desplazamiento horizontal"
+        >
+          <div class="packs-carousel-inner">
+            <div
+              v-for="(regalo, idx) in regalosLoop"
+              :key="`${regalo.id}-${idx}`"
+              class="packs-carousel-slide packs-carousel-slide--regalo"
+            >
+              <RegaloCardComponent
+                compact
+                :regalo-id="regalo.id"
+                :title="regalo.title"
+                :image="regalo.image"
+                :price="regalo.price"
+                :agotado="Boolean(regalo.agotado)"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <button
+        type="button"
+        class="packs-carousel-arrow packs-carousel-arrow--next"
+        aria-label="Ver regalos siguientes"
+        @click="scrollRegalosCarousel(1)"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+          <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+        </svg>
+      </button>
     </div>
   </section>
 
@@ -167,12 +215,32 @@ import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue'
 import NavBar from '../components/NavBar'
 import FooterComponent from '../components/FooterComponent.vue'
 import CardComponent from '../components/CardComponent.vue'
+import RegaloCardComponent from '../components/RegaloCardComponent.vue'
 import catalogoPacks from '../data/catalogoPack.json'
+import regalosPadre from '../data/regalosPadre.json'
 
 /** Dos series iguales para bucle de scroll sin salto visible */
 const proyectosLoop = computed(() => [...catalogoPacks, ...catalogoPacks])
+/** Precio CLP en JSON (ej. "$9.990") → número para ordenar */
+function parsePrecioClp(price) {
+  if (typeof price !== 'string') return Number.POSITIVE_INFINITY
+  const digits = price.replace(/\D/g, '')
+  const n = Number.parseInt(digits, 10)
+  return Number.isFinite(n) ? n : Number.POSITIVE_INFINITY
+}
+
+const regalosOrdenados = computed(() =>
+  [...regalosPadre].sort((a, b) => {
+    const diff = parsePrecioClp(a.price) - parsePrecioClp(b.price)
+    if (diff !== 0) return diff
+    return a.title.localeCompare(b.title, 'es', { sensitivity: 'base' })
+  }),
+)
+
+const regalosLoop = computed(() => [...regalosOrdenados.value, ...regalosOrdenados.value])
 
 const carouselRef = ref(null)
+const regalosCarouselRef = ref(null)
 const sobreMiDedicatoriaWrapRef = ref(null)
 const sobreMiDedicatoriaRef = ref(null)
 const carouselPaused = ref(false)
@@ -186,10 +254,12 @@ const PACKS_CAROUSEL_IW = '--packs-carousel-iw'
 
 let rafId = 0
 let syncCarouselRaf = null
+let syncRegalosCarouselRaf = null
 let touchResumeTimer = null
 let focusResumeTimer = null
 let arrowResumeTimer = null
 let carouselResizeObserver = null
+let regalosCarouselResizeObserver = null
 let sobreMiFitRaf = null
 let sobreMiResizeObserver = null
 
@@ -253,6 +323,13 @@ function syncCarouselInlineSize() {
   if (w > 0) el.style.setProperty(PACKS_CAROUSEL_IW, `${w}px`)
 }
 
+function syncRegalosCarouselInlineSize() {
+  const el = regalosCarouselRef.value
+  if (!el) return
+  const w = el.clientWidth
+  if (w > 0) el.style.setProperty(PACKS_CAROUSEL_IW, `${w}px`)
+}
+
 /**
  * ResizeObserver + setProperty en el mismo frame puede disparar
  * "ResizeObserver loop completed with undelivered notifications".
@@ -263,6 +340,14 @@ function scheduleSyncCarouselInlineSize() {
   syncCarouselRaf = requestAnimationFrame(() => {
     syncCarouselRaf = null
     syncCarouselInlineSize()
+  })
+}
+
+function scheduleSyncRegalosCarouselInlineSize() {
+  if (syncRegalosCarouselRaf != null) return
+  syncRegalosCarouselRaf = requestAnimationFrame(() => {
+    syncRegalosCarouselRaf = null
+    syncRegalosCarouselInlineSize()
   })
 }
 
@@ -379,6 +464,44 @@ function scrollCarousel(direction) {
   }, behavior === 'smooth' ? 3200 : 800)
 }
 
+function scrollRegalosCarousel(direction) {
+  const el = regalosCarouselRef.value
+  if (!el) return
+
+  const slides = getCarouselSlides(el)
+  if (!slides.length) return
+
+  const regaloCount = slides.length / 2
+  if (!regaloCount || !Number.isInteger(regaloCount)) return
+
+  const threeCols = window.matchMedia('(min-width: 768px)').matches
+  const step = threeCols ? 3 : 1
+  const currentIdx = nearestCarouselSlideIndex(slides, el.scrollLeft)
+  const snappedLeft = slides[currentIdx].offsetLeft
+
+  el.scrollLeft = snappedLeft
+
+  const logicalIdx = currentIdx % regaloCount
+  const rawTarget = logicalIdx + direction * step
+  const targetLogical = ((rawTarget % regaloCount) + regaloCount) % regaloCount
+  const didWrap = rawTarget < 0 || rawTarget >= regaloCount
+
+  const targetIdx =
+    currentIdx >= regaloCount ? regaloCount + targetLogical : targetLogical
+  const targetLeft = slides[targetIdx].offsetLeft
+  const behavior = carouselArrowScrollInstant() || didWrap ? 'auto' : 'smooth'
+
+  const applyScroll = () => {
+    el.scrollTo({ left: targetLeft, behavior })
+  }
+
+  if (behavior === 'smooth') {
+    requestAnimationFrame(applyScroll)
+  } else {
+    applyScroll()
+  }
+}
+
 function tick() {
   const el = carouselRef.value
   if (el && !carouselPaused.value && !reduceMotion.value) {
@@ -396,12 +519,19 @@ function tick() {
 onMounted(async () => {
   reduceMotion.value = window.matchMedia('(prefers-reduced-motion: reduce)').matches
   syncCarouselInlineSize()
+  syncRegalosCarouselInlineSize()
   const el = carouselRef.value
   if (el && typeof ResizeObserver !== 'undefined') {
     carouselResizeObserver = new ResizeObserver(() => scheduleSyncCarouselInlineSize())
     carouselResizeObserver.observe(el)
   }
+  const regalosEl = regalosCarouselRef.value
+  if (regalosEl && typeof ResizeObserver !== 'undefined') {
+    regalosCarouselResizeObserver = new ResizeObserver(() => scheduleSyncRegalosCarouselInlineSize())
+    regalosCarouselResizeObserver.observe(regalosEl)
+  }
   await nextTick()
+  scheduleSyncRegalosCarouselInlineSize()
   if (typeof ResizeObserver !== 'undefined' && sobreMiDedicatoriaWrapRef.value) {
     sobreMiResizeObserver = new ResizeObserver(() => scheduleFitSobreMiDedicatoria())
     sobreMiResizeObserver.observe(sobreMiDedicatoriaWrapRef.value)
@@ -420,12 +550,18 @@ onUnmounted(() => {
     cancelAnimationFrame(syncCarouselRaf)
     syncCarouselRaf = null
   }
+  if (syncRegalosCarouselRaf != null) {
+    cancelAnimationFrame(syncRegalosCarouselRaf)
+    syncRegalosCarouselRaf = null
+  }
   if (sobreMiFitRaf != null) {
     cancelAnimationFrame(sobreMiFitRaf)
     sobreMiFitRaf = null
   }
   carouselResizeObserver?.disconnect()
   carouselResizeObserver = null
+  regalosCarouselResizeObserver?.disconnect()
+  regalosCarouselResizeObserver = null
   sobreMiResizeObserver?.disconnect()
   sobreMiResizeObserver = null
   cancelAnimationFrame(rafId)
@@ -656,6 +792,43 @@ onUnmounted(() => {
 
 #complementos .complementos-titulo {
   color: var(--vin-profundo, #3a0f18);
+}
+
+#complementos .packs-carousel-outer {
+  align-items: stretch;
+  overflow: visible;
+}
+
+#complementos .packs-carousel-wrap {
+  overflow-x: auto;
+  overflow-y: visible;
+  padding-block: 0.4rem 1rem;
+}
+
+#complementos .packs-carousel-inner {
+  --packs-gap: clamp(0.55rem, 1.8vw, 0.95rem);
+  align-items: stretch;
+  padding-inline: 0.1rem;
+}
+
+#complementos .packs-carousel-slide--regalo {
+  width: min(11.25rem, calc(var(--packs-carousel-iw, 100%) - 0.35rem));
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  overflow: visible;
+}
+
+#complementos .packs-carousel-slide--regalo > * {
+  height: 100%;
+}
+
+@media (min-width: 768px) {
+  #complementos .packs-carousel-slide--regalo {
+    width: min(
+      11rem,
+      calc((var(--packs-carousel-iw, 100%) - 2 * var(--packs-gap)) / 3)
+    );
+  }
 }
 
 .packs-titulo {
