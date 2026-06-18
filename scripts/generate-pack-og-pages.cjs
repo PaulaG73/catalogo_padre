@@ -57,6 +57,8 @@ for (const pack of packs) {
 
 const catalogPageUrl = `${base}/og-catalogo.html`
 const catalogImgUrl = `${base}/img/portada.jpg`
+const catalogDescription =
+  'Cuál es el tuyo? Infaltable? Coleccionista? Parrillero? Conocedor? Innovador? Testarudo?'
 const catalogHtml = `<!DOCTYPE html>
 <html lang="es">
 <head>
@@ -67,9 +69,9 @@ const catalogHtml = `<!DOCTYPE html>
   <meta property="og:site_name" content="Vinóloga">
   <meta property="og:locale" content="es_CL">
   <meta property="og:title" content="Especial Día del Padre · Vinóloga">
-  <meta property="og:description" content="Elige tu vino o pack para regalar y haz tu pedido por whatsapp.">
-  <meta name="description" content="Elige tu vino o pack para regalar y haz tu pedido por whatsapp.">
-  <meta name="twitter:description" content="Elige tu vino o pack para regalar y haz tu pedido por whatsapp.">
+  <meta property="og:description" content="${catalogDescription}">
+  <meta name="description" content="${catalogDescription}">
+  <meta name="twitter:description" content="${catalogDescription}">
   <meta property="og:url" content="${catalogPageUrl}">
   <meta property="og:image" content="${catalogImgUrl}">
   <meta property="og:image:secure_url" content="${catalogImgUrl}">

@@ -287,8 +287,8 @@ let sobreMiResizeObserver = null
 
 const SOBRE_MI_DEDICATORIA_FS = '--sobre-mi-dedicatoria-fs'
 const SOBRE_MI_DEDICATORIA_MIN_PX = 8
-const SOBRE_MI_DEDICATORIA_MAX_PX = 40
-const SOBRE_MI_DEDICATORIA_FIT_SLACK_PX = 2
+const SOBRE_MI_DEDICATORIA_MAX_PX = 120
+const SOBRE_MI_DEDICATORIA_SIDE_MARGIN_PX = 5
 
 function dedicatoriaLineas() {
   const dedicatoria = sobreMiDedicatoriaRef.value
@@ -296,29 +296,52 @@ function dedicatoriaLineas() {
   return dedicatoria.querySelectorAll('.sobre-mi-dedicatoria-line')
 }
 
-function dedicatoriaCabeEnAncho(maxWidth) {
-  const dedicatoria = sobreMiDedicatoriaRef.value
+function rectsOverlapX(a, b, margin = 0) {
+  return !(a.right <= b.left + margin || a.left >= b.right - margin)
+}
+
+function dedicatoriaSinSolapamientoImagenes() {
+  const cluster = sobreMiClusterRef.value
+  if (!cluster) return true
+
+  const hero = cluster.querySelector('.sobre-mi-hero-img')
+  const logo = cluster.querySelector('.sobre-mi-logo')
+  const clusterStyle = getComputedStyle(cluster)
+  const isHorizontal =
+    clusterStyle.display === 'grid' || clusterStyle.flexDirection === 'row'
+
+  if (!isHorizontal) return true
+
   const lines = dedicatoriaLineas()
-  if (!dedicatoria || !lines.length) return false
+  if (!lines.length) return true
+
+  const margin = SOBRE_MI_DEDICATORIA_SIDE_MARGIN_PX
+  for (const line of lines) {
+    const lineRect = line.getBoundingClientRect()
+    if (hero && rectsOverlapX(lineRect, hero.getBoundingClientRect(), margin)) return false
+    if (logo && rectsOverlapX(lineRect, logo.getBoundingClientRect(), margin)) return false
+  }
+  return true
+}
+
+function dedicatoriaCabeEnAncho(maxWidth) {
+  const lines = dedicatoriaLineas()
+  if (!lines.length) return false
   for (const line of lines) {
     if (line.scrollWidth > maxWidth + 0.5) return false
   }
-  if (dedicatoria.scrollWidth > maxWidth + 0.5) return false
-  return true
+  return dedicatoriaSinSolapamientoImagenes()
 }
 
 function getSobreMiDedicatoriaMaxWidth() {
   const cluster = sobreMiClusterRef.value
   const wrap = sobreMiDedicatoriaWrapRef.value
-  const dedicatoria = sobreMiDedicatoriaRef.value
-  if (!wrap || !dedicatoria) return 0
+  if (!wrap) return 0
 
   const wrapStyles = getComputedStyle(wrap)
-  let maxWidth =
-    dedicatoria.clientWidth ||
-    wrap.clientWidth -
-      parseFloat(wrapStyles.paddingLeft) -
-      parseFloat(wrapStyles.paddingRight)
+  const padL = parseFloat(wrapStyles.paddingLeft) || 0
+  const padR = parseFloat(wrapStyles.paddingRight) || 0
+  let maxWidth = wrap.clientWidth - padL - padR
 
   if (maxWidth <= 0) return 0
 
@@ -333,14 +356,18 @@ function getSobreMiDedicatoriaMaxWidth() {
       const wrapRect = wrap.getBoundingClientRect()
       const heroRect = hero.getBoundingClientRect()
       const logoRect = logo.getBoundingClientRect()
-      const leftBound = Math.max(wrapRect.left, heroRect.right)
-      const rightBound = Math.min(wrapRect.right, logoRect.left)
-      const gapWidth = Math.max(0, rightBound - leftBound)
-      maxWidth = Math.min(maxWidth, gapWidth)
+      const centerX = wrapRect.left + wrapRect.width / 2
+      const margin = SOBRE_MI_DEDICATORIA_SIDE_MARGIN_PX
+      const leftRoom = 2 * (centerX - heroRect.right - margin)
+      const rightRoom = 2 * (logoRect.left - centerX - margin)
+      const sideLimit = Math.min(leftRoom, rightRoom)
+      if (Number.isFinite(sideLimit) && sideLimit > 0) {
+        maxWidth = Math.min(maxWidth, sideLimit)
+      }
     }
   }
 
-  return Math.max(0, maxWidth - SOBRE_MI_DEDICATORIA_FIT_SLACK_PX)
+  return maxWidth
 }
 
 function fitSobreMiDedicatoria() {
@@ -352,7 +379,10 @@ function fitSobreMiDedicatoria() {
   if (maxWidth <= 0) return
 
   let lo = SOBRE_MI_DEDICATORIA_MIN_PX
-  let hi = SOBRE_MI_DEDICATORIA_MAX_PX
+  let hi = Math.min(
+    SOBRE_MI_DEDICATORIA_MAX_PX,
+    Math.max(SOBRE_MI_DEDICATORIA_MIN_PX, Math.ceil(maxWidth * 0.24)),
+  )
   let best = lo
 
   while (lo <= hi) {
@@ -620,12 +650,16 @@ onMounted(async () => {
     if (sobreMiClusterRef.value) sobreMiResizeObserver.observe(sobreMiClusterRef.value)
     if (sobreMiDedicatoriaWrapRef.value) sobreMiResizeObserver.observe(sobreMiDedicatoriaWrapRef.value)
   }
-  const runFitSobreMi = () => scheduleFitSobreMiDedicatoria()
+  const runFitSobreMi = () => {
+    scheduleFitSobreMiDedicatoria()
+    requestAnimationFrame(() => scheduleFitSobreMiDedicatoria())
+  }
   if (document.fonts?.ready) {
     document.fonts.ready.then(runFitSobreMi)
   } else {
     runFitSobreMi()
   }
+  window.addEventListener('resize', scheduleFitSobreMiDedicatoria, { passive: true })
   rafId = requestAnimationFrame(tick)
 })
 
@@ -648,6 +682,7 @@ onUnmounted(() => {
   regalosCarouselResizeObserver = null
   sobreMiResizeObserver?.disconnect()
   sobreMiResizeObserver = null
+  window.removeEventListener('resize', scheduleFitSobreMiDedicatoria)
   cancelAnimationFrame(rafId)
   if (touchResumeTimer) clearTimeout(touchResumeTimer)
   if (focusResumeTimer) clearTimeout(focusResumeTimer)
@@ -999,6 +1034,7 @@ onUnmounted(() => {
   min-width: 0;
   max-width: 100%;
   overflow-x: clip;
+  padding-inline: 0;
 }
 
 #sobre-mi .sobre-mi-dedicatoria {
@@ -1006,21 +1042,23 @@ onUnmounted(() => {
   width: 100%;
   max-width: 100%;
   min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
   font-family: 'Nunito', system-ui, sans-serif;
-  font-size: var(--sobre-mi-dedicatoria-fs, 0.85rem);
+  font-size: var(--sobre-mi-dedicatoria-fs, 1rem);
   font-weight: 600;
-  line-height: 1.3;
+  line-height: 1.25;
   color: var(--vin-profundo);
-  overflow-x: clip;
 }
 
 #sobre-mi .sobre-mi-dedicatoria-line {
   display: block;
-  white-space: nowrap;
+  width: fit-content;
   max-width: 100%;
-  overflow-x: clip;
-  text-overflow: clip;
+  margin-inline: auto;
+  white-space: nowrap;
 }
 
 #sobre-mi .sobre-mi-dedicatoria--destacado {
@@ -1054,6 +1092,10 @@ onUnmounted(() => {
   #sobre-mi.sobre-mi-section--light {
     padding-top: 0.35rem !important;
     padding-bottom: 0.35rem !important;
+  }
+
+  #sobre-mi .sobre-mi.container {
+    padding-inline: clamp(0.25rem, 2vw, 0.65rem);
   }
 
   #sobre-mi .sobre-mi-cluster {
@@ -1104,7 +1146,7 @@ onUnmounted(() => {
     justify-items: center;
     width: 100%;
     max-width: none;
-    column-gap: clamp(0.65rem, 2vw, 1.75rem);
+    column-gap: clamp(0.5rem, 1.5vw, 1.25rem);
     row-gap: 0;
   }
 
@@ -1124,7 +1166,7 @@ onUnmounted(() => {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding-inline: clamp(0.35rem, 1.5vw, 1.25rem);
+    padding-inline: 0;
     z-index: 0;
   }
 
@@ -1140,10 +1182,6 @@ onUnmounted(() => {
 @media (min-width: 768px) and (max-width: 991.98px) {
   #sobre-mi .sobre-mi-hero-img {
     width: clamp(92px, 9.5vw, 124px);
-  }
-
-  #sobre-mi .sobre-mi-dedicatoria-wrap {
-    padding-inline: clamp(0.5rem, 1.5vw, 1rem);
   }
 
   #sobre-mi .sobre-mi-logo {

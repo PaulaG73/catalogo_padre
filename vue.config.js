@@ -58,6 +58,8 @@ module.exports = defineConfig({
       const opts = args[0]
       opts.ogPageUrl = origin ? `${origin}/` : ''
       opts.ogImageUrl = origin ? `${origin}/img/portada.jpg` : ''
+      opts.ogDescription =
+        'Cuál es el tuyo? Infaltable? Coleccionista? Parrillero? Conocedor? Innovador? Testarudo?'
       return args
     })
   },
