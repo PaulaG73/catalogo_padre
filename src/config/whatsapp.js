@@ -54,6 +54,11 @@ const CATALOG_OG_PAGE = 'og-catalogo.html'
 export const CATALOG_OG_DESCRIPTION =
   'Cuál es el tuyo? Infaltable? Coleccionista? Parrillero? Conocedor? Innovador? Testarudo?'
 
+const CATALOG_WHATSAPP_LINK_INTRO =
+  'Revisa el catálogo de vinos y otros regalos aquí 👇'
+
+const FOOTER_ORDER_MESSAGE = 'Hola, Vinóloga, quiero hacer un pedido.'
+
 /**
  * Nombre de archivo en `public/`: `og-{id en minúsculas}.html` (Netlify/Linux distinguen mayúsculas; si no coincide, cae el SPA y WhatsApp muestra el og:image del index: logo).
  */
@@ -134,17 +139,29 @@ function resolveCatalogPreviewUrlForWhatsApp() {
 }
 
 /**
- * WhatsApp desde el pie: solo enlace al catálogo con vista previa (og-catalogo.html).
+ * Texto + enlace del catálogo (para compartir o reenviar por WhatsApp).
+ */
+export function getCatalogShareMessageText() {
+  const url =
+    resolveCatalogPreviewUrlForWhatsApp() ||
+    `${WHATSAPP_FALLBACK_SITE_ORIGIN}/${CATALOG_OG_PAGE}`
+  return `${CATALOG_WHATSAPP_LINK_INTRO}\n\n${url}`
+}
+
+/**
+ * Abre WhatsApp para compartir el catálogo (sin destinatario fijo: elegir contacto o reenviar).
+ */
+export function getWhatsAppShareCatalogUrl() {
+  return `https://api.whatsapp.com/send?text=${encodeURIComponent(getCatalogShareMessageText())}`
+}
+
+/**
+ * WhatsApp del footer: mensaje de pedido directo a Vinóloga.
  */
 export function getWhatsAppFooterUrl() {
   const digits = digitsOnly()
   if (!digits) return '#'
-  const previewUrl = resolveCatalogPreviewUrlForWhatsApp()
-  const text =
-    previewUrl && /^https:\/\//i.test(previewUrl)
-      ? previewUrl
-      : `${WHATSAPP_FALLBACK_SITE_ORIGIN}/${CATALOG_OG_PAGE}`
-  return `https://api.whatsapp.com/send?phone=${digits}&text=${encodeURIComponent(text)}`
+  return `https://api.whatsapp.com/send?phone=${digits}&text=${encodeURIComponent(FOOTER_ORDER_MESSAGE)}`
 }
 
 /**
