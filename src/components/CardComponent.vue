@@ -2,6 +2,7 @@
     <div
       class="card card-pack h-100 d-flex flex-column shadow-sm"
       :class="agotado ? 'card-pack--agotado border-secondary' : 'border-success'"
+      :style="{ '--pack-bloques': bloques.length }"
     >
       <div class="card-img-wrap card-img-wrap--pack flex-shrink-0">
         <div class="card-img-photo">
@@ -560,6 +561,26 @@
     border-top: 2px solid rgba(var(--vin-acento-rgb), 0.55);
     opacity: 1;
     margin: 0.7rem 0;
+  }
+
+  @media (max-width: 767.98px) {
+    .card-pack.h-100 {
+      height: auto !important;
+    }
+
+    .card-pack-body {
+      flex: 0 0 auto;
+      flex-grow: 0;
+      padding: 0.45rem 0.7rem 0.55rem;
+    }
+
+    .card-bloques {
+      flex: 0 0 auto;
+    }
+
+    .card-bloque-rule {
+      margin: 0.45rem 0;
+    }
   }
 
   </style>

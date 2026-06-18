@@ -1352,4 +1352,20 @@ onUnmounted(() => {
   min-height: 0;
   align-self: stretch;
 }
+
+@media (max-width: 767.98px) {
+  #packs .packs-carousel-inner {
+    align-items: flex-start;
+    min-height: 0;
+  }
+
+  #packs .packs-carousel-slide {
+    align-self: flex-start;
+  }
+
+  #packs .packs-carousel-slide > * {
+    flex: 0 0 auto;
+    height: auto;
+  }
+}
 </style>
