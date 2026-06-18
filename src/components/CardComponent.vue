@@ -12,12 +12,54 @@
           :alt="`${title}. ${valle}${agotado ? ' (agotado)' : ''}`"
           loading="lazy"
         >
+        <div class="card-img-caption">
+          <h6 class="card-title fw-bold mb-0">{{ title }}</h6>
+          <p class="card-valle mb-0">{{ valle }}</p>
+          <div class="card-img-caption-actions">
+            <div class="card-prices">
+              <template v-if="priceOferta && !agotado">
+                <p class="card-price card-price--regular mb-0">{{ price }}</p>
+                <p class="card-price card-price--oferta mb-0 fw-bold">{{ priceOferta }}</p>
+              </template>
+              <p
+                v-else
+                class="card-price mb-0 fw-bold"
+                :class="{ 'card-price--agotado': agotado }"
+              >
+                {{ price }}
+              </p>
+            </div>
+            <a
+              class="btn btn-whatsapp card-wa-cta shadow-sm"
+              :href="agotado ? '#' : whatsappUrl"
+              :target="agotado ? undefined : '_blank'"
+              :rel="agotado ? undefined : 'noopener noreferrer'"
+              :aria-disabled="agotado || !whatsappReady"
+              :class="{
+                'opacity-50': !whatsappReady || agotado,
+                'pe-none': agotado,
+                'cursor-not-allowed': agotado,
+              }"
+              :aria-label="whatsappLinkAriaLabel"
+              @click="onWaCardClick"
+            >
+              <svg
+                class="card-wa-icon"
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.435 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+              </svg>
+              <span class="card-wa-cta-text">Lo quiero!</span>
+            </a>
+          </div>
+        </div>
       </div>
       <div class="card-body card-pack-body d-flex flex-column flex-grow-1">
-        <div class="card-heading flex-shrink-0 w-100 text-center">
-          <h6 class="card-title fw-bold mb-1 mb-sm-2">{{ title }}</h6>
-          <p class="card-valle mb-0 fw-bold">{{ valle }}</p>
-        </div>
         <div class="card-bloques flex-grow-1 text-start min-w-0">
           <template v-for="(bloque, index) in bloques" :key="index">
             <hr v-if="index > 0" class="card-bloque-rule" aria-hidden="true">
@@ -64,53 +106,6 @@
               </span>
             </p>
           </template>
-        </div>
-        <hr class="card-divider flex-shrink-0">
-        <div class="card-price-wa-row flex-shrink-0">
-          <div class="card-prices">
-            <template v-if="priceOferta && !agotado">
-              <p class="card-price card-price--regular mb-0 text-secondary text-decoration-line-through">
-                {{ price }}
-              </p>
-              <p class="card-price card-price--oferta mb-0 fw-bold text-success">{{ priceOferta }}</p>
-            </template>
-            <p
-              v-else
-              class="card-price mb-0 fw-bold text-center"
-              :class="agotado ? 'text-secondary text-decoration-line-through' : 'text-success'"
-            >
-              {{ price }}
-            </p>
-          </div>
-          <span class="card-wa-wrap">
-            <a
-              class="btn btn-whatsapp rounded-circle card-wa-btn shadow-sm"
-              :href="agotado ? '#' : whatsappUrl"
-              :target="agotado ? undefined : '_blank'"
-              :rel="agotado ? undefined : 'noopener noreferrer'"
-              :aria-disabled="agotado || !whatsappReady"
-              :class="{
-                'opacity-50': !whatsappReady || agotado,
-                'pe-none': agotado,
-                'cursor-not-allowed': agotado,
-              }"
-              :aria-label="whatsappLinkAriaLabel"
-              @click="onWaCardClick"
-            >
-              <svg
-                class="card-wa-icon"
-                xmlns="http://www.w3.org/2000/svg"
-                width="18"
-                height="18"
-                fill="currentColor"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
-                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.435 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
-              </svg>
-            </a>
-            <span class="card-wa-tooltip" role="tooltip" aria-hidden="true">{{ waTooltipText }}</span>
-          </span>
         </div>
       </div>
     </div>
@@ -200,16 +195,10 @@
     return m && m[1] ? m[1] : ''
   }
 
-  const waTooltipText = computed(() => {
-    if (props.agotado) return 'Este pack está agotado'
-    const n = packNumeroFromTitulo(props.title)
-    return n ? `Pide el pack ${n} aquí...` : 'Pide tu pack aquí...'
-  })
-
   const whatsappLinkAriaLabel = computed(() => {
     if (props.agotado) return 'Pack agotado, pedido no disponible'
     const n = packNumeroFromTitulo(props.title)
-    return n ? `Pedir el pack ${n} por WhatsApp` : 'Pedir pack por WhatsApp'
+    return n ? `Lo quiero! Pedir el pack ${n} por WhatsApp` : 'Lo quiero! Pedir pack por WhatsApp'
   })
 
   let lastWaOpenMs = 0
@@ -262,7 +251,7 @@
   .card-pack-body {
     flex: 1 1 auto;
     min-height: 0;
-    padding: 0.65rem 0.7rem 0.75rem;
+    padding: 0.55rem 0.7rem 0.7rem;
   }
   
   .card-img-wrap {
@@ -275,6 +264,62 @@
 
   .card-img-wrap--pack {
     position: relative;
+  }
+
+  .card-img-caption {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+    padding: 2rem clamp(0.75rem, 3.5vw, 1rem) 0.65rem;
+    text-align: center;
+    background: linear-gradient(
+      180deg,
+      transparent 0%,
+      rgba(20, 8, 10, 0.55) 32%,
+      rgba(20, 8, 10, 0.94) 100%
+    );
+    pointer-events: none;
+  }
+
+  .card-img-caption-actions {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.65rem;
+    margin-top: 0.5rem;
+    padding: 0.45rem 0.2rem 0.15rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.18);
+    pointer-events: auto;
+  }
+
+  .card-img-caption .card-title {
+    font-family: 'Nunito', system-ui, sans-serif;
+    color: #fff;
+    font-size: clamp(0.82rem, 2.45vw, 1.05rem);
+    line-height: 1.2;
+    font-weight: 800;
+    overflow-wrap: break-word;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.45);
+  }
+
+  .card-img-caption .card-valle {
+    margin-top: 0.2rem;
+    font-size: clamp(0.62rem, 1.65vw, 0.78rem);
+    line-height: 1.3;
+    letter-spacing: 0.03em;
+    font-weight: 700;
+    color: #f4c9cf;
+    overflow-wrap: break-word;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  }
+
+  .card-pack--agotado .card-img-caption .card-title,
+  .card-pack--agotado .card-img-caption .card-valle,
+  .card-pack--agotado .card-img-caption .card-prices {
+    opacity: 0.88;
   }
 
   .card-pack-agotado-badge {
@@ -300,8 +345,6 @@
     filter: grayscale(1) brightness(0.9);
   }
 
-  .card-pack--agotado .card-title,
-  .card-pack--agotado .card-valle,
   .card-pack--agotado .card-bloque {
     opacity: 0.88;
   }
@@ -321,28 +364,72 @@
     }
   }
   
-  .card-heading {
-    margin-bottom: 0.35rem;
-  }
-  
-  .card-title {
+  .card-wa-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3rem;
+    flex-shrink: 0;
+    padding: 0.32rem 0.65rem;
+    border-radius: 2rem;
     font-family: 'Nunito', system-ui, sans-serif;
-    overflow-wrap: break-word;
-    font-size: clamp(0.82rem, 2.45vw, 1.05rem);
-    line-height: 1.2;
-    font-weight: 700;
-  }
-  
-  .card-valle {
-    font-size: clamp(0.62rem, 1.65vw, 0.78rem);
-    line-height: 1.3;
+    font-size: clamp(0.68rem, 1.75vw, 0.82rem);
+    font-weight: 800;
     letter-spacing: 0.02em;
-    color: rgba(var(--vin-acento-rgb), 0.82);
-    font-weight: 700;
-    padding: 0 0.25rem;
-    overflow-wrap: break-word;
+    line-height: 1.2;
+    white-space: nowrap;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
-  
+
+  .card-wa-cta:not(.pe-none):hover,
+  .card-wa-cta:not(.pe-none):focus-visible {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(37, 211, 102, 0.45);
+  }
+
+  .card-wa-cta-text {
+    line-height: 1;
+  }
+
+  .card-wa-icon {
+    flex-shrink: 0;
+  }
+
+  .card-prices {
+    flex: 1 1 auto;
+    min-width: 0;
+    text-align: left;
+    line-height: 1.15;
+  }
+
+  .card-img-caption .card-price--regular {
+    color: rgba(255, 255, 255, 0.62);
+    text-decoration: line-through;
+    font-size: clamp(0.68rem, 1.7vw, 0.8rem);
+    font-weight: 600;
+    margin-bottom: 0.05rem;
+  }
+
+  .card-img-caption .card-price--oferta {
+    color: #9ef0b8;
+    font-size: clamp(0.82rem, 2vw, 0.98rem);
+    line-height: 1.15;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+  }
+
+  .card-img-caption .card-price:not(.card-price--regular):not(.card-price--oferta) {
+    color: #9ef0b8;
+    font-size: clamp(0.82rem, 2vw, 0.98rem);
+    text-align: left;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+  }
+
+  .card-img-caption .card-price--agotado {
+    color: rgba(255, 255, 255, 0.5);
+    text-decoration: line-through;
+    text-align: left;
+  }
+
   .card-bloques {
     min-height: 0;
     min-width: 0;
@@ -436,80 +523,6 @@
     border-top: 2px solid var(--vin-acento);
     opacity: 0.85;
     margin: 0.65rem 0;
-  }
-  
-  .card-divider {
-    border-color: rgba(var(--vin-acento-rgb), 0.45);
-    opacity: 1;
-    margin: 0;
-    margin-top: 0.5rem;
-  }
-  
-  .card-price-wa-row {
-    position: relative;
-    z-index: 1;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    gap: 0.55rem;
-    box-sizing: border-box;
-    padding: 0.2rem 0 0.35rem;
-  }
-
-  .card-price-wa-row:hover,
-  .card-price-wa-row:focus-within {
-    z-index: 5;
-  }
-
-  .card-prices {
-    text-align: center;
-    flex: 0 1 auto;
-    min-width: 0;
-  }
-
-  .card-price--regular {
-    font-size: clamp(0.78rem, 1.9vw, 0.88rem);
-    line-height: 1.15;
-    font-weight: 600;
-    opacity: 0.85;
-    margin-bottom: 0.08rem;
-  }
-
-  .card-price--oferta {
-    font-size: clamp(0.95rem, 2.35vw, 1.12rem);
-    line-height: 1.15;
-  }
-  
-  .card-price {
-    font-size: clamp(0.88rem, 2.15vw, 1.02rem);
-    line-height: 1.2;
-    letter-spacing: 0.02em;
-    overflow-wrap: break-word;
-    font-weight: 700;
-  }
-
-  .card-wa-wrap {
-    position: relative;
-    display: inline-flex;
-    flex-shrink: 0;
-    align-self: center;
-    vertical-align: middle;
-  }
-
-  .card-wa-btn {
-    width: 2.15rem;
-    height: 2.15rem;
-    padding: 0;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    line-height: 1;
-    flex-shrink: 0;
-  }
-
-  .card-wa-icon {
-    flex-shrink: 0;
   }
 
   </style>
