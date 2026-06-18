@@ -190,9 +190,29 @@
         </svg>
       </button>
     </div>
+    <div class="container text-center complementos-cta-wrap">
+      <a
+        href="#packs"
+        class="packs-complementos-cta"
+        aria-label="Vuelve a la sección de vinos y packs"
+      >
+        <span class="packs-complementos-cta-text">Vuelve a los vinos</span>
+        <svg
+          class="packs-complementos-cta-icon packs-complementos-cta-icon--up"
+          xmlns="http://www.w3.org/2000/svg"
+          width="18"
+          height="18"
+          fill="currentColor"
+          viewBox="0 0 16 16"
+          aria-hidden="true"
+        >
+          <path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z"/>
+        </svg>
+      </a>
+    </div>
   </section>
 
-  <div class="prefooter-pitch--light">
+  <div class="prefooter-pitch--dark">
     <div class="prefooter-pitch container text-center">
       <span class="prefooter-line">Otros vinos y packs disponibles</span>
       <span class="prefooter-sep" aria-hidden="true">·</span>
@@ -611,8 +631,18 @@ onUnmounted(() => {
   border-bottom: 1px solid rgba(58, 15, 24, 0.1);
 }
 
+.prefooter-pitch--dark {
+  width: 100%;
+  background-color: var(--vin-negro-marca, #0a0a0a);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
 .prefooter-pitch--light .prefooter-line {
   color: #000;
+}
+
+.prefooter-pitch--dark .prefooter-line {
+  color: var(--vin-texto-muted);
 }
 
 .prefooter-line {
@@ -720,12 +750,13 @@ onUnmounted(() => {
   color: var(--vin-texto-muted);
 }
 
-#packs .packs-complementos-cta {
+#packs .packs-complementos-cta,
+#complementos .packs-complementos-cta {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.45rem;
-  margin: 0 auto 1.35rem;
+  margin: 0 auto;
   padding: 0.48rem 1.05rem 0.52rem;
   border-radius: 2rem;
   font-family: 'Nunito', system-ui, sans-serif;
@@ -746,8 +777,19 @@ onUnmounted(() => {
     background 0.2s ease;
 }
 
+#packs .packs-complementos-cta {
+  margin-bottom: 1.35rem;
+}
+
+#complementos .complementos-cta-wrap {
+  margin-top: 0.35rem;
+  padding-bottom: 0.25rem;
+}
+
 #packs .packs-complementos-cta:hover,
-#packs .packs-complementos-cta:focus-visible {
+#packs .packs-complementos-cta:focus-visible,
+#complementos .packs-complementos-cta:hover,
+#complementos .packs-complementos-cta:focus-visible {
   color: #fff;
   transform: translateY(-1px);
   box-shadow:
@@ -755,13 +797,18 @@ onUnmounted(() => {
     0 6px 20px rgba(0, 0, 0, 0.45);
 }
 
-#packs .packs-complementos-cta:active {
+#packs .packs-complementos-cta:active,
+#complementos .packs-complementos-cta:active {
   transform: translateY(0);
 }
 
-#packs .packs-complementos-cta-icon {
+.packs-complementos-cta-icon {
   flex-shrink: 0;
   animation: packs-complementos-bounce 1.8s ease-in-out infinite;
+}
+
+.packs-complementos-cta-icon--up {
+  animation: packs-complementos-bounce-up 1.8s ease-in-out infinite;
 }
 
 @keyframes packs-complementos-bounce {
@@ -774,13 +821,25 @@ onUnmounted(() => {
   }
 }
 
+@keyframes packs-complementos-bounce-up {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  #packs .packs-complementos-cta-icon {
+  .packs-complementos-cta-icon {
     animation: none;
   }
 
   #packs .packs-complementos-cta:hover,
-  #packs .packs-complementos-cta:focus-visible {
+  #packs .packs-complementos-cta:focus-visible,
+  #complementos .packs-complementos-cta:hover,
+  #complementos .packs-complementos-cta:focus-visible {
     transform: none;
   }
 }

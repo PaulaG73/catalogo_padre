@@ -1,5 +1,5 @@
 <template>
-    <footer class="footer py-2 py-md-4 mt-auto bg-vin-negro border-top footer-vino">
+    <footer class="footer py-2 py-md-4 mt-auto border-top footer-vino footer-vino--light">
       <div class="container d-flex align-items-center flex-wrap gap-2">
   
         <!-- Botón volver al inicio (izquierda, ancho fijo) -->
@@ -92,9 +92,19 @@
     border-color: var(--vin-borde-sutil) !important;
     box-shadow: 0 -1px 0 0 rgba(109, 44, 53, 0.28);
   }
+
+  .footer-vino--light {
+    background-color: #fff;
+    border-color: rgba(58, 15, 24, 0.12) !important;
+    box-shadow: 0 -1px 0 0 rgba(58, 15, 24, 0.08);
+  }
   
   .footer {
     color: rgba(255, 255, 255, 0.9);
+  }
+
+  .footer-vino--light.footer {
+    color: var(--vin-profundo, #3a0f18);
   }
   
   .footer-home-btn {
@@ -105,15 +115,28 @@
     border-radius: 0.25rem;
     transition: color 0.15s ease, opacity 0.15s ease;
   }
+
+  .footer-vino--light .footer-home-btn {
+    color: var(--vin-acento, #6d2c35);
+  }
   
   .footer-home-btn:hover {
     color: #fff;
     opacity: 0.95;
   }
+
+  .footer-vino--light .footer-home-btn:hover {
+    color: var(--vin-profundo, #3a0f18);
+    opacity: 1;
+  }
   
   .footer-home-btn:focus-visible {
     outline: 2px solid rgba(255, 255, 255, 0.7);
     outline-offset: 3px;
+  }
+
+  .footer-vino--light .footer-home-btn:focus-visible {
+    outline-color: rgba(var(--vin-acento-rgb), 0.55);
   }
   
   .footer-home-wrap {
@@ -190,6 +213,10 @@
   .footer-copy {
     font-size: 0.85rem;
     text-align: center;
+  }
+
+  .footer-vino--light .footer-copy {
+    color: rgba(58, 15, 24, 0.72);
   }
   
   .footer-side {
