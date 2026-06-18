@@ -48,66 +48,6 @@
   background-color: var(--vin-negro-marca) !important;
 }
 
-/* Tooltip junto al botón WhatsApp (footer y tarjetas): un solo estilo */
-.footer-wa-tooltip,
-.card-wa-tooltip {
-  position: absolute;
-  left: calc(100% + 10px);
-  top: 50%;
-  translate: -6px -50%;
-  padding: 0.4rem 0.75rem;
-  background: #fff;
-  color: var(--vin-profundo, #3a0f18);
-  font-family: 'Nunito', system-ui, sans-serif;
-  font-size: 0.8125rem;
-  font-weight: 700;
-  line-height: 1.25;
-  text-align: center;
-  white-space: nowrap;
-  border-radius: 0.4rem;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.22);
-  pointer-events: none;
-  opacity: 0;
-  visibility: hidden;
-  z-index: 20;
-  transition:
-    opacity 0.2s ease,
-    visibility 0.2s ease,
-    translate 0.2s ease;
-}
-
-.footer-wa-tooltip::after,
-.card-wa-tooltip::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  right: 100%;
-  translate: 2px -50%;
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-width: 7px 8px 7px 0;
-  border-color: transparent #fff transparent transparent;
-  filter: drop-shadow(-2px 0 3px rgba(0, 0, 0, 0.12));
-}
-
-.footer-wa-wrap:hover .footer-wa-tooltip,
-.footer-wa-wrap:focus-within .footer-wa-tooltip,
-.card-wa-wrap:hover .card-wa-tooltip,
-.card-wa-wrap:focus-within .card-wa-tooltip {
-  opacity: 1;
-  visibility: visible;
-  translate: 0 -50%;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .footer-wa-tooltip,
-  .card-wa-tooltip {
-    transition: none;
-    translate: 0 -50%;
-  }
-}
-
 .btn-whatsapp {
   --bs-btn-color: #fff;
   --bs-btn-bg: var(--wa-green);
@@ -123,6 +63,86 @@
   --bs-btn-disabled-color: #fff;
   --bs-btn-disabled-bg: var(--wa-green);
   --bs-btn-disabled-border-color: var(--wa-green);
+}
+
+/* Botón WhatsApp con CTA visible (tarjetas y footer) */
+.wa-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  flex-shrink: 0;
+  padding: 0.32rem 0.65rem;
+  border-radius: 2rem;
+  font-family: 'Nunito', system-ui, sans-serif;
+  font-size: clamp(0.68rem, 1.75vw, 0.82rem);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+  white-space: nowrap;
+  text-decoration: none;
+  --bs-btn-color: var(--vin-profundo, #3a0f18);
+  color: var(--vin-profundo, #3a0f18);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    color 0.2s ease;
+}
+
+.wa-cta:not(.pe-none):not([aria-disabled='true']):hover,
+.wa-cta:not(.pe-none):not([aria-disabled='true']):focus-visible {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(37, 211, 102, 0.45);
+  --bs-btn-color: #fff;
+  color: #fff;
+}
+
+.wa-cta-text {
+  line-height: 1.15;
+  text-shadow: 0 0 1px rgba(255, 255, 255, 0.45);
+}
+
+.wa-cta:not(.pe-none):not([aria-disabled='true']):hover .wa-cta-text,
+.wa-cta:not(.pe-none):not([aria-disabled='true']):focus-visible .wa-cta-text {
+  text-shadow: 0 1px 2px rgba(58, 15, 24, 0.45);
+}
+
+.wa-cta-icon {
+  flex-shrink: 0;
+  filter: drop-shadow(0 0 1px rgba(255, 255, 255, 0.35));
+}
+
+.wa-cta:not(.pe-none):not([aria-disabled='true']):hover .wa-cta-icon,
+.wa-cta:not(.pe-none):not([aria-disabled='true']):focus-visible .wa-cta-icon {
+  filter: drop-shadow(0 1px 2px rgba(58, 15, 24, 0.35));
+}
+
+.wa-cta--footer {
+  white-space: nowrap;
+  gap: 0.45rem;
+  padding: 0.5rem 1rem;
+  font-size: clamp(0.64rem, 2.35vw, 0.92rem);
+  max-width: none;
+}
+
+.wa-cta--footer .wa-cta-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.wa-cta--footer .wa-cta-text {
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wa-cta {
+    transition: box-shadow 0.15s ease, color 0.15s ease;
+  }
+
+  .wa-cta:not(.pe-none):not([aria-disabled='true']):hover,
+  .wa-cta:not(.pe-none):not([aria-disabled='true']):focus-visible {
+    transform: none;
+  }
 }
 
 .btn-success {

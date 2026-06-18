@@ -58,50 +58,59 @@
           <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
         </svg>
       </button>
-      <div
-        ref="carouselRef"
-        class="packs-carousel-wrap flex-grow-1 min-w-0"
-        tabindex="0"
-        role="region"
-        aria-label="Carrusel de packs, desplazamiento horizontal"
-      >
-        <div class="packs-carousel-inner">
-          <div
-            v-for="(proyecto, idx) in proyectosLoop"
-            :key="`${proyecto.id}-${idx}`"
-            class="packs-carousel-slide"
-          >
-            <CardComponent
-              :pack-id="proyecto.id"
-              :title="proyecto.title"
-              :valle="proyecto.valle"
-              :bloques="proyecto.bloques"
-              :image="proyecto.image"
-              :price="proyecto.price"
-              :oferta-etiqueta="proyecto.ofertaEtiqueta || ''"
-              :price-oferta="proyecto.priceOferta || ''"
-              :agotado="Boolean(proyecto.agotado)"
-            />
+      <div class="packs-carousel-slot flex-grow-1 min-w-0">
+        <div
+          ref="carouselRef"
+          class="packs-carousel-wrap"
+          tabindex="0"
+          role="region"
+          aria-label="Carrusel de packs, desplazamiento horizontal"
+        >
+          <div class="packs-carousel-inner">
+            <div
+              v-for="(proyecto, idx) in proyectosLoop"
+              :key="`${proyecto.id}-${idx}`"
+              class="packs-carousel-slide"
+            >
+              <CardComponent
+                :pack-id="proyecto.id"
+                :title="proyecto.title"
+                :valle="proyecto.valle"
+                :bloques="proyecto.bloques"
+                :image="proyecto.image"
+                :price="proyecto.price"
+                :oferta-etiqueta="proyecto.ofertaEtiqueta || ''"
+                :price-oferta="proyecto.priceOferta || ''"
+                :agotado="Boolean(proyecto.agotado)"
+              />
+            </div>
           </div>
         </div>
       </div>
-      <button
-        type="button"
-        class="packs-carousel-arrow packs-carousel-arrow--next"
-        aria-label="Ver packs siguientes"
-        @click="scrollCarousel(1)"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
-          <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
-        </svg>
-      </button>
-    </div>
-    <div class="container text-end mt-2">
-      <a href="#sobre-mi" class="btn btn-sm rounded-circle p-1 btn-top" title="Volver al inicio" aria-label="Volver al inicio">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
-          <path d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 0 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5z"/>
-        </svg>
-      </a>
+      <div class="packs-carousel-rail d-flex flex-column align-items-center flex-shrink-0">
+        <div class="packs-carousel-rail-mid d-flex align-items-center justify-content-center">
+          <button
+            type="button"
+            class="packs-carousel-arrow packs-carousel-arrow--next"
+            aria-label="Ver packs siguientes"
+            @click="scrollCarousel(1)"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+              <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+            </svg>
+          </button>
+        </div>
+        <a
+          href="#sobre-mi"
+          class="btn btn-sm rounded-circle p-1 btn-top packs-carousel-top"
+          title="Volver al inicio"
+          aria-label="Volver al inicio"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+            <path d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 0 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5z"/>
+          </svg>
+        </a>
+      </div>
     </div>
   </section>
 
@@ -246,6 +255,9 @@ function scrollCarousel(direction) {
   const slides = getCarouselSlides(el)
   if (!slides.length) return
 
+  const packCount = slides.length / 2
+  if (!packCount || !Number.isInteger(packCount)) return
+
   const threeCols = window.matchMedia('(min-width: 768px)').matches
   const step = threeCols ? 3 : 1
   const currentIdx = nearestCarouselSlideIndex(slides, el.scrollLeft)
@@ -254,9 +266,15 @@ function scrollCarousel(direction) {
   /* Corrige deriva del auto-scroll antes de calcular el destino */
   el.scrollLeft = snappedLeft
 
-  const targetIdx = Math.max(0, Math.min(slides.length - 1, currentIdx + direction * step))
+  const logicalIdx = currentIdx % packCount
+  const rawTarget = logicalIdx + direction * step
+  const targetLogical = ((rawTarget % packCount) + packCount) % packCount
+  const didWrap = rawTarget < 0 || rawTarget >= packCount
+
+  const targetIdx =
+    currentIdx >= packCount ? packCount + targetLogical : targetLogical
   const targetLeft = slides[targetIdx].offsetLeft
-  const behavior = carouselArrowScrollInstant() ? 'auto' : 'smooth'
+  const behavior = carouselArrowScrollInstant() || didWrap ? 'auto' : 'smooth'
 
   const applyScroll = () => {
     el.scrollTo({ left: targetLeft, behavior })
@@ -826,6 +844,30 @@ onUnmounted(() => {
   min-height: 0;
 }
 
+.packs-carousel-slot {
+  min-width: 0;
+}
+
+.packs-carousel-rail {
+  align-self: stretch;
+}
+
+.packs-carousel-rail-mid {
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+}
+
+.packs-carousel-top {
+  flex-shrink: 0;
+  margin-bottom: 0.75rem;
+}
+
+.packs-carousel-top.btn-top {
+  width: clamp(2.5rem, 8vw, 2.85rem);
+  height: clamp(2.5rem, 8vw, 2.85rem);
+}
+
 .packs-carousel-arrow {
   flex-shrink: 0;
   display: inline-flex;
@@ -862,6 +904,7 @@ onUnmounted(() => {
 }
 
 .packs-carousel-wrap {
+  width: 100%;
   overflow-x: auto;
   overflow-y: hidden;
   scroll-snap-type: x mandatory;

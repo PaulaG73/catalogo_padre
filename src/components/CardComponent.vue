@@ -4,14 +4,16 @@
       :class="agotado ? 'card-pack--agotado border-secondary' : 'border-success'"
     >
       <div class="card-img-wrap card-img-wrap--pack flex-shrink-0">
-        <span v-if="agotado" class="card-pack-agotado-badge">Agotado</span>
-        <img
-          :src="image"
-          class="card-img-top"
-          :class="{ 'card-pack-img--agotado': agotado }"
-          :alt="`${title}. ${valle}${agotado ? ' (agotado)' : ''}`"
-          loading="lazy"
-        >
+        <div class="card-img-photo">
+          <span v-if="agotado" class="card-pack-agotado-badge">Agotado</span>
+          <img
+            :src="image"
+            class="card-img-top"
+            :class="{ 'card-pack-img--agotado': agotado }"
+            :alt="`${title}. ${valle}${agotado ? ' (agotado)' : ''}`"
+            loading="lazy"
+          >
+        </div>
         <div class="card-img-caption">
           <h6 class="card-title fw-bold mb-0">{{ title }}</h6>
           <p class="card-valle mb-0">{{ valle }}</p>
@@ -30,7 +32,7 @@
               </p>
             </div>
             <a
-              class="btn btn-whatsapp card-wa-cta shadow-sm"
+              class="btn btn-whatsapp wa-cta shadow-sm"
               :href="agotado ? '#' : whatsappUrl"
               :target="agotado ? undefined : '_blank'"
               :rel="agotado ? undefined : 'noopener noreferrer'"
@@ -44,7 +46,7 @@
               @click="onWaCardClick"
             >
               <svg
-                class="card-wa-icon"
+                class="wa-cta-icon"
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
                 height="16"
@@ -54,7 +56,7 @@
               >
                 <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.435 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
               </svg>
-              <span class="card-wa-cta-text">Lo quiero!</span>
+              <span class="wa-cta-text">Lo quiero!</span>
             </a>
           </div>
         </div>
@@ -256,31 +258,32 @@
   
   .card-img-wrap {
     width: 100%;
-    aspect-ratio: 3 / 4;
     overflow: hidden;
     background: rgba(0, 0, 0, 0.04);
     border-radius: 1.125rem 1.125rem 0 0;
   }
 
   .card-img-wrap--pack {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .card-img-photo {
     position: relative;
+    flex: 0 0 auto;
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.06);
   }
 
   .card-img-caption {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    flex: 0 0 auto;
     z-index: 1;
-    padding: 2rem clamp(0.75rem, 3.5vw, 1rem) 0.65rem;
+    padding: 0.55rem clamp(0.65rem, 3vw, 0.9rem) 0.6rem;
     text-align: center;
-    background: linear-gradient(
-      180deg,
-      transparent 0%,
-      rgba(20, 8, 10, 0.55) 32%,
-      rgba(20, 8, 10, 0.94) 100%
-    );
-    pointer-events: none;
+    background: linear-gradient(180deg, #2a1014 0%, #14080a 100%);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
   }
 
   .card-img-caption-actions {
@@ -288,11 +291,10 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    gap: 0.65rem;
-    margin-top: 0.5rem;
-    padding: 0.45rem 0.2rem 0.15rem;
+    gap: 0.5rem;
+    margin-top: 0.4rem;
+    padding: 0.4rem 0.1rem 0.05rem;
     border-top: 1px solid rgba(255, 255, 255, 0.18);
-    pointer-events: auto;
   }
 
   .card-img-caption .card-title {
@@ -344,10 +346,6 @@
   .card-pack-img--agotado {
     filter: grayscale(1) brightness(0.9);
   }
-
-  .card-pack--agotado .card-bloque {
-    opacity: 0.88;
-  }
   
   .card-img-top {
     display: block;
@@ -356,43 +354,12 @@
     object-fit: cover;
     object-position: center center;
   }
-  
+
   @media (max-width: 575.98px) {
-    .card-img-wrap {
+    .card-img-photo {
       aspect-ratio: unset;
-      height: min(72vw, 340px);
+      height: min(68vw, 320px);
     }
-  }
-  
-  .card-wa-cta {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.3rem;
-    flex-shrink: 0;
-    padding: 0.32rem 0.65rem;
-    border-radius: 2rem;
-    font-family: 'Nunito', system-ui, sans-serif;
-    font-size: clamp(0.68rem, 1.75vw, 0.82rem);
-    font-weight: 800;
-    letter-spacing: 0.02em;
-    line-height: 1.2;
-    white-space: nowrap;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-
-  .card-wa-cta:not(.pe-none):hover,
-  .card-wa-cta:not(.pe-none):focus-visible {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 14px rgba(37, 211, 102, 0.45);
-  }
-
-  .card-wa-cta-text {
-    line-height: 1;
-  }
-
-  .card-wa-icon {
-    flex-shrink: 0;
   }
 
   .card-prices {
@@ -438,9 +405,10 @@
   
   .card-bloque {
     min-width: 0;
-    font-size: clamp(0.66rem, 1.75vw, 0.82rem);
-    line-height: 1.22;
-    color: #444;
+    font-family: 'Nunito', system-ui, sans-serif;
+    font-size: clamp(0.74rem, 2vw, 0.92rem);
+    line-height: 1.28;
+    color: var(--vin-profundo, #3a0f18);
     text-align: left;
   }
   
@@ -449,7 +417,7 @@
     flex-direction: row;
     flex-wrap: nowrap;
     align-items: flex-start;
-    gap: 0.2rem 0.35rem;
+    gap: 0.28rem 0.4rem;
     min-width: 0;
     width: 100%;
   }
@@ -458,13 +426,22 @@
     flex-shrink: 0;
     display: inline-flex;
     align-items: flex-start;
-    padding-top: 0.1rem;
+    padding-top: 0.12rem;
+  }
+
+  .bloque-copa .copa-svg {
+    width: 14px;
+    height: 22px;
   }
   
   .bloque-botellas {
     flex-shrink: 0;
     white-space: nowrap;
     padding-top: 0.1rem;
+    font-size: clamp(0.7rem, 1.85vw, 0.84rem);
+    font-weight: 800;
+    color: var(--vin-acento, #6d2c35);
+    letter-spacing: 0.02em;
   }
   
   .bloque-nombre {
@@ -474,10 +451,22 @@
     display: block;
     text-align: left;
     line-height: 1.35;
+    font-size: clamp(0.74rem, 2vw, 0.9rem);
+    font-weight: 700;
+    color: var(--vin-profundo, #3a0f18);
     white-space: normal;
     overflow: visible;
     overflow-wrap: break-word;
     word-break: normal;
+  }
+
+  .card-pack--agotado .card-bloque,
+  .card-pack--agotado .bloque-nombre {
+    color: #5c4f52;
+  }
+
+  .card-pack--agotado .bloque-botellas {
+    color: #8a7579;
   }
 
   @media (max-width: 767.98px) {
@@ -520,9 +509,9 @@
   
   .card-bloque-rule {
     border: none;
-    border-top: 2px solid var(--vin-acento);
-    opacity: 0.85;
-    margin: 0.65rem 0;
+    border-top: 2px solid rgba(var(--vin-acento-rgb), 0.55);
+    opacity: 1;
+    margin: 0.7rem 0;
   }
 
   </style>
