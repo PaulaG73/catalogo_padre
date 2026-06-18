@@ -54,8 +54,8 @@ const CATALOG_OG_PAGE = 'og-catalogo.html'
 export const CATALOG_OG_DESCRIPTION =
   'Cuál es el tuyo? Infaltable? Coleccionista? Parrillero? Conocedor? Innovador? Testarudo?'
 
-const CATALOG_WHATSAPP_LINK_INTRO =
-  'Revisa el catálogo de vinos y otros regalos aquí 👇'
+export const CATALOG_WHATSAPP_LINK_INTRO =
+  'Revisa el catálogo de vinos y otros regalos aquí\n\u25BC'
 
 const FOOTER_ORDER_MESSAGE = 'Hola, Vinóloga, quiero hacer un pedido.'
 
@@ -152,7 +152,7 @@ export function getCatalogShareMessageText() {
  * Abre WhatsApp para compartir el catálogo (sin destinatario fijo: elegir contacto o reenviar).
  */
 export function getWhatsAppShareCatalogUrl() {
-  return `https://api.whatsapp.com/send?text=${encodeURIComponent(getCatalogShareMessageText())}`
+  return `https://wa.me/?text=${encodeURIComponent(getCatalogShareMessageText())}`
 }
 
 /**

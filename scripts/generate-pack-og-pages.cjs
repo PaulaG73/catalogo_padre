@@ -92,3 +92,37 @@ const catalogHtml = `<!DOCTYPE html>
 
 fs.writeFileSync(path.join(outDir, 'og-catalogo.html'), catalogHtml, 'utf8')
 console.log('wrote og-catalogo.html -> portada.jpg')
+
+const shareIntro =
+  'Revisa el catálogo de vinos y otros regalos aquí\n\u25BC'
+const shareCatalogUrl = catalogPageUrl
+const compartirHtml = `<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Compartir catálogo · Vinóloga</title>
+  <meta name="robots" content="noindex">
+</head>
+<body style="margin:0;font-family:system-ui,sans-serif;background:#1a1a1a;color:#eee;text-align:center;padding:2rem 1rem;">
+  <p style="margin:0 0 1rem;">Abriendo WhatsApp para compartir el catálogo…</p>
+  <p style="margin:0;"><a id="wa-fallback" href="#" style="color:#5cb85c;">Toca aquí si no se abre WhatsApp</a></p>
+  <script>
+    (function () {
+      if (window.__catalogShareOpened) return
+      window.__catalogShareOpened = true
+      var intro = ${JSON.stringify(shareIntro)}
+      var catalogUrl = ${JSON.stringify(shareCatalogUrl)}
+      var text = intro + '\\n\\n' + catalogUrl
+      var dest = 'https://wa.me/?text=' + encodeURIComponent(text)
+      var link = document.getElementById('wa-fallback')
+      if (link) link.href = dest
+      window.location.replace(dest)
+    })()
+  <\/script>
+</body>
+</html>
+`
+
+fs.writeFileSync(path.join(outDir, 'compartir-catalogo.html'), compartirHtml, 'utf8')
+console.log('wrote compartir-catalogo.html')
